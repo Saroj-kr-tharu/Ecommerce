@@ -5,7 +5,7 @@ class CurdService {
 
     async createService(data){
         try {
-            const res = this.repo.create(data);
+            const res = await this.repo.create(data);
             return res; 
 
         } catch (error) {
@@ -16,7 +16,7 @@ class CurdService {
 
     async deleteService(data){
         try {
-            const res = this.repo.delete(data);
+            const res = await this.repo.delete(data);
             return res; 
 
         } catch (error) {
@@ -27,7 +27,7 @@ class CurdService {
 
     async updateService(data,id){
         try {
-            const res = this.repo.updateById(data, id );
+            const res = await this.repo.updateById(data, id );
             return res; 
 
         } catch (error) {
@@ -40,7 +40,7 @@ class CurdService {
 
     async getByIdService(data){
         try {
-            const res = this.repo.getById(data);
+            const res = await this.repo.getById(data);
             return res; 
 
         } catch (error) {
@@ -51,7 +51,7 @@ class CurdService {
     
     async getAll(){
         try {
-            const res = this.repo.getAll();
+            const res = await this.repo.getAll();
             return res; 
 
         } catch (error) {

@@ -46,14 +46,12 @@ class userService extends CurdService {
 
 
             const res = await jwt_helper.verifyToken(data);
-            console.log("response from verify token => ", res)
 
              if (!res){
                 throw new error(' token expeired ')
             }
             
             const infoUser = await USER_REPO.getByEmail(res.data.email);
-            console.log('heh')
             const response = {
                 email: res.data.email,
                 role: infoUser?.dataValues?.role,

@@ -1,49 +1,26 @@
-const {userService} = require('../services/index')
+
 const {SucessCode,ServerErrosCodes} = require('../utlis/errors_codes')
+const {adminService} = require('../services/index')
 
-class AuthController { 
+class AdminController { 
 
-    async signup(req,res) {
+    async addProduct(req,res) {
         try {
             
     
             const data = req?.body;
-            const response = await userService.createService(data);
-            
-            return res.status(SucessCode.OK).json({
-                message: "Successfully to Signup",
-                success: true,
-                data: response,
-                err: {},
-            });
-
-        } catch (error) {
-            console.log("something went wrong in controller  level  (signup) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
-                data: {},
-                err: error.message || error,
-            });
-        }
-    }
-    
-    async signin(req,res) {
-        try {
-            
-            
-            const data = req?.body;
-            const response = await userService.loginService(data);
+            console.log('data => ', data)
+            const response = await adminService.createService(data);
             
             return res.status(SucessCode.CREATED).json({
-                message: "Successfully to login",
+                message: "Successfully to add products",
                 success: true,
                 data: response,
                 err: {},
             });
 
         } catch (error) {
-            console.log("something went wrong in controller  level  (signup) ")
+            console.log("something went wrong in controller  level  (add) ")
             return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
                 message: "Failed to Signup",
                 success: false,
@@ -52,23 +29,49 @@ class AuthController {
             });
         }
     }
-
-     async veriyToken(req,res) {
+    
+    async editProduct(req,res) {
         try {
             
             
-            const token = req?.headers['x-access-token'];
-            const response = await userService.verifyToken(token);
+            const data = req?.body;
+            const id = req?.query?.id;
+            const response = await adminService.updateService(data, id);
+            
+            return res.status(SucessCode.CREATED).json({
+                message: "Successfully to update Products",
+                success: true,
+                data: response, 
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (edit products) ")
+            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
+                message: "Failed to update products ",
+                success: false,
+                data: {},
+                err: error.message || error,
+            });
+        }
+    }
+
+     async deleteProduct(req,res) {
+        try {
+            
+            
+            const id = req?.query?.id;
+            const response = await adminService.deleteByIdService(id);
             
             return res.status(SucessCode.OK).json({
-                message: "Successfully to login",
+                message: "Successfully delete product",
                 success: true,
                 data: response,
                 err: {},
             });
 
         } catch (error) {
-            console.log("something went wrong in controller  level  (verifytoken) ")
+            console.log("something went wrong in controller  level  (delete product) ")
             return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
                 message: "Failed to Signup",
                 success: false,
@@ -82,6 +85,6 @@ class AuthController {
 
 
 
-const authController = new AuthController();
+const adminController = new AdminController();
 
-module.exports = authController;
+module.exports = adminController;
