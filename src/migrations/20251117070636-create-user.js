@@ -9,32 +9,30 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      username: {
-        type: Sequelize.STRING,
-        
-      },
       email: {
         type: Sequelize.STRING,
-        allowNull:false,
-        unique:true,
-        validate:{
+        allowNull: false,
+        unique: true,
+        validate: {
           isEmail: true,
         }
       },
-     password: {
+      username: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      password: {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
           len: [5, 500],
         },
       },
-      
       role: {
         allowNull: false,
         type: Sequelize.ENUM("CUSTOMER", "ADMIN"),
         defaultValue: "CUSTOMER"
       },
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

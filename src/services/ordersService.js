@@ -2,7 +2,7 @@ const CurdService = require('./curdService')
 const  {Product_Repo} = require('../repository/index')
 
 
-class custumerService extends CurdService {
+class OrdersService extends CurdService {
     constructor(){
         super(Product_Repo)
     }
@@ -20,21 +20,9 @@ class custumerService extends CurdService {
         }
     }
 
-    async addOrders( data){
-        try {
-            console.log('data => ', data )
-            const res = await Product_Repo.create(data);
-            return res; 
-
-        } catch (error) {
-            console.log("something went wrong in service curd level  (add) ")
-            throw error;
-        }
-    }
-
 
 }
 
-const custumerservice= new custumerService()
+const ordersservice= new OrdersService()
 
-module.exports = custumerservice;
+module.exports = ordersservice;

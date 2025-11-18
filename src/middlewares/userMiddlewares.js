@@ -1,41 +1,44 @@
 
 const {ClientErrorsCodes} = require('../utlis/errors_codes')
 
-const signupAndLoginMiddle = (req, res, next) => {
-  if (!req.body.email || !req.body.password ) {
-    console.log("Something went wrong in auth middleware");
-    
-    return res.status(ClientErrorsCodes.BAD_REQUEST).json({
-      data: {},
-      message: "Email or Password is missing  ",
-      success: false,
-    });
-  }
+class UserMiddleware {
 
-  next();
-};
-
-
-const verifyTokenMiddle = (req, res, next) => {
-    const token = req?.headers['x-access-token'];
-    if (!token ) {
-        console.log("token is missing ");
+   signupAndLogin  (req, res, next) {
+      if (!req.body.email || !req.body.password ) {
+        console.log("Something went wrong in auth middleware");
         
-        return res.status(ClientErrorsCodes.UNAUTHORISED).json({
-        data: {},
-        message: "Email or Password is missing  ",
-        success: false,
+        return res.status(ClientErrorsCodes.BAD_REQUEST).json({
+          data: {},
+          message: "Email or Password is missing  ",
+          success: false,
         });
-    }
+      }
 
-  next();
-};
-
-
+      next();
+    };
 
 
+    verifyToken  (req, res, next)  {
+        const token = req?.headers['x-access-token'];
+        if (!token ) {
+            console.log("token is missing ");
+            
+            return res.status(ClientErrorsCodes.UNAUTHORISED).json({
+            data: {},
+            message: "Email or Password is missing  ",
+            success: false,
+            });
+        }
 
-module.exports = {
- signupAndLoginMiddle,
- verifyTokenMiddle
-};
+      next();
+    };
+
+}
+
+
+
+
+
+const userMiddlewares = new  UserMiddleware()
+
+module.exports = userMiddlewares; 
