@@ -27,6 +27,7 @@ class CurdService {
 
     async updateService(data,id){
         try {
+            console.log(`data => ${data} id => ${id}`)
             const res = await this.repo.updateById(data, id );
             return res; 
 

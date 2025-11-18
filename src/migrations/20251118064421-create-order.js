@@ -85,7 +85,8 @@ module.exports = {
       },
       cancelledAt: {
         type: Sequelize.DATE,
-        allowNull: true
+        allowNull: true, 
+        defaultValue:null
       },
       isActive: {
         type: Sequelize.BOOLEAN,

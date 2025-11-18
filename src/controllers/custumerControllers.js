@@ -42,40 +42,16 @@ class CustumerControllers {
      async addOrders(req,res) {
         try {
             
-            // shipping address = {
-                //     "street": "123 Main St",
-                //     "city": "Kathmandu",
-                //     "zip": "44600",
-                //     "country": "Nepal"
-                // },
-
-            //   "billingAddress": {
-                    //     "street": "123 Main St",
-                    //     "city": "Kathmandu",
-                    //     "zip": "44600",
-                    //     "country": "Nepal"
-                    //   },    
-            //    order Items =          [
-            //     {
-            //     "productId": 5,
-            //     "quantity": 2,
-            //     "productPrice": 100
-            //     },
-            //     {
-            //     "productId": 7,
-            //     "quantity": 1,
-            //     "productPrice": 200
-            //     }
-            // ]
+            
                 
-            const {shippingAddress, billingAddress, paymentMethod, orderItems } = req?.body;
+            const {userId, shippingAddress, billingAddress, paymentMethod, orderItems } = req?.body;
 
 
-            if ( !shippingAddress || !billingAddress || !paymentMethod || !orderItems ){
-                throw new  error("missing something ")
+            if ( !shippingAddress || !billingAddress || !paymentMethod || !orderItems || !userId){
+                throw new  error(" required is not mention  ")
             }
 
-            const response = await custumerService.addOrders({shippingAddress, billingAddress, paymentMethod, orderItems});
+            const response = await custumerService.addOrders({userId, shippingAddress, billingAddress, paymentMethod, orderItems});
             
             return res.status(SucessCode.OK).json({
                 message: "Successfully to add products",

@@ -1,24 +1,25 @@
 const CurdService = require('./curdService')
-const  {Product_Repo} = require('../repository/index')
+const  {Orders_Repo} = require('../repository/index')
 
 
 class OrdersService extends CurdService {
     constructor(){
-        super(Product_Repo)
+        super(Orders_Repo)
     }
 
-    async getProduct(page, limit, data){
+
+    async getAllOrders(offset,limit){
         try {
 
-            const offset = (page - 1) * limit;
-            const res = await Product_Repo.getProPagation(offset,limit, data);
-            return res; 
+        const res = await Orders_Repo.getAllOrders(offset,limit);
+        return res;
 
         } catch (error) {
             console.log("something went wrong in service curd level  (getById) ")
             throw error;
         }
     }
+    
 
 
 }

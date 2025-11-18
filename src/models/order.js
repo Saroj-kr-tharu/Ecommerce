@@ -137,8 +137,8 @@ module.exports = (sequelize, DataTypes) => {
 
     cancelledAt: {
       type:DataTypes.DATE,
-      allowNull: false, 
-
+      allowNull: true, 
+      defaultValue : null 
     },
     
     isActive: {

@@ -1,6 +1,6 @@
 
 const {SucessCode,ServerErrosCodes} = require('../utlis/errors_codes')
-const {adminService} = require('../services/index')
+const {adminService, orderService} = require('../services/index')
 
 class AdminController { 
 
@@ -72,6 +72,58 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (delete product) ")
+            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
+                message: "Failed to Signup",
+                success: false,
+                data: {},
+                err: error.message || error,
+            });
+        }
+    }
+
+
+    async getAllOrders(req,res) {
+        try {
+            const {page,limit} = req?.query;
+            const response = await adminService.getAllOrders(page,parseInt(limit));
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all orders",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (getallOrders) ")
+            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
+                message: "Failed to Signup",
+                success: false,
+                data: {},
+                err: error.message || error,
+            });
+        }
+    }
+
+
+    async editOrders(req,res) {
+        try {
+            const {orderId} = req?.query;
+            const data = req?.body; 
+
+            console.log(data)
+
+            const response = await orderService.updateService(data, orderId);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully updated orders",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (update orders) ")
             return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
                 message: "Failed to Signup",
                 success: false,

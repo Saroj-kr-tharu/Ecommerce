@@ -44,7 +44,6 @@ class CURD_REPO{
 
     async getById (id) { 
         try {
-            console.log('id from repo => ', id)
             const res = await this.model.findOne({
                 where: {id},
             });

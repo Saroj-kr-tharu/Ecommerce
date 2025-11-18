@@ -20,6 +20,8 @@ router.get( "/auth/veriyToken", userMiddleware.verifyToken, authController.veriy
 router.post( "/products/add",adminMiddleware.verifyToken,  adminController.addProduct );
 router.delete( "/products/delete", adminMiddleware.verifyToken, adminController.deleteProduct );
 router.patch( "/products/update", adminMiddleware.verifyToken, adminController.editProduct );
+router.get( "/orders",  adminMiddleware.verifyToken, adminController.getAllOrders );
+router.patch( "/orders/update",  adminMiddleware.verifyToken, adminController.editOrders );
 
 // custumer 
 router.get( "/products",  CustumerControllers.getProduct );

@@ -13,7 +13,6 @@ class userService extends CurdService {
     async loginService(data){
         try {
             const {password, email} = data;
-            console.log("password => ", password, "email => ", email)
             const infoUser = await USER_REPO.getByEmail(email);
             const hashpassword = infoUser?.dataValues?.password
 
@@ -23,9 +22,9 @@ class userService extends CurdService {
 
 
             const token = await jwt_helper.createToken(data);
-
             const response = {
                 email: data.email,
+                id: infoUser?.dataValues?.id,
                 role: infoUser?.dataValues?.role,
                 username: infoUser?.dataValues?.username,
                 jwt: token,

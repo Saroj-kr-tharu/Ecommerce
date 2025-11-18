@@ -1,5 +1,6 @@
 const CurdService = require('./curdService')
 const  {Product_Repo} = require('../repository/index')
+const { Order, OrderItem, Product, sequelize } = require("../models");
 
 
 class custumerService extends CurdService {
@@ -22,15 +23,111 @@ class custumerService extends CurdService {
 
     async addOrders( data){
         try {
-            console.log('data => ', data )
-            const res = await Product_Repo.create(data);
-            return res; 
+
+            // start transaction 
+            const t = await sequelize.transaction();
+
+            let subtotal  = 0 ; 
+            const products = [];
+
+            // loop 
+            for (let item of data.orderItems) {
+                const product = await Product.findByPk(item.productId, { transaction: t });
+
+                // check product exist
+                if (!product) throw new Error(`Product with ID ${item.productId} not found`);
+
+                // check stock 
+                if (product.stock < item.quantity)
+                    throw new Error(`Not enough stock for product ${product.name}`);
+
+                // add to product
+                products.push(product);
+
+                // Calculate subtotal using DB price
+                subtotal += product.price * item.quantity;
+            }
+
+
+
+            // 2️ Calculate tax, shipping, total
+            const tax = subtotal * 0.13; // example: 13% tax
+            const shippingFee = 50;  // fixed now 
+            const discount = 0; // no discount 
+            const totalAmount = parseFloat((subtotal + tax + shippingFee - discount).toFixed(3));
+
+            const {userId,paymentMethod,shippingAddress, billingAddress  } = data; 
+            
+            // calculate deliveredDate
+            const deliveredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); 
+            
+
+             // 3️ Create order
+                const order = await Order.create(
+                    {
+                        userId,
+                        orderNumber: "ORD" + Date.now(),
+                        subtotal,
+                        tax,
+                        shippingFee,
+                        discount,
+                        totalAmount,
+                        paymentMethod,
+                        paymentStatus: "pending",
+                        orderStatus: "pending",
+                        shippingAddress,
+                        billingAddress,
+                        isActive: 1,
+                        deliveredAt , 
+                        cancelledAt:null ,
+                    },
+                    { transaction: t }
+                );
+
+                // 4️ Create order items & update stock
+                for (let i = 0; i < data.orderItems.length; i++) {
+                    const item = data.orderItems[i];
+                    const product = products[i];
+                    
+                    // Create order item
+                    await OrderItem.create(
+                        {
+                        orderId: order.id,
+                        productId: product.id,
+                        productName: product.name,
+                        productPrice: product.price, 
+                        quantity: item.quantity,
+                        total: product.price * item.quantity,
+                        },
+                        { transaction: t }
+                    );
+
+                    // Reduce product stock
+                    product.stock -= item.quantity;
+                    await product.save({ transaction: t });
+                }
+
+                // 5️ Commit transaction
+                await t.commit();
+
+            // 6️ Return 
+             const res =  {
+                orderId: order.id,
+                orderNumber: order.orderNumber,
+                totalAmount,
+            }
+
+            return res;
+
+             
 
         } catch (error) {
             console.log("something went wrong in service curd level  (add) ")
             throw error;
         }
     }
+
+
 
 
 }
