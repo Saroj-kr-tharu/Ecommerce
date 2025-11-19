@@ -1,3 +1,5 @@
+const {  ServiceError} = require('../utlis/index')
+
 class CurdService { 
     constructor(repo){
         this.repo = repo;
@@ -10,7 +12,12 @@ class CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
-            throw error;
+            
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -21,7 +28,11 @@ class CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -33,7 +44,11 @@ class CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (update) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -46,7 +61,11 @@ class CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (getById) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
     
@@ -57,7 +76,11 @@ class CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (getAll) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 

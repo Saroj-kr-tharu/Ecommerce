@@ -1,6 +1,6 @@
 const CurdService = require('./curdService')
 const  {Orders_Repo} = require('../repository/index')
-
+const {  ServiceError} = require('../utlis/index')
 
 class OrdersService extends CurdService {
     constructor(){
@@ -16,7 +16,11 @@ class OrdersService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (getById) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
     

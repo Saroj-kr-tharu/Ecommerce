@@ -3,6 +3,8 @@ const { Product } = require("../models/index");
 
 const { Op, where } = require("sequelize");
 
+const { AppError, HttpsStatusCodes} = require('../utlis/index')
+
 class UserREpo extends CURD_REPO { 
 
     constructor(){
@@ -19,7 +21,13 @@ class UserREpo extends CURD_REPO {
             return res;
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot delete BY ID ',
+                'Issue in deleting By ID in productRepo REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
 
@@ -71,7 +79,13 @@ class UserREpo extends CURD_REPO {
               return res;
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched product by filter ',
+                'Issue in fetching  in productRepo REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
 

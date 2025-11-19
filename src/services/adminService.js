@@ -1,7 +1,7 @@
 const CurdService = require('./curdService')
 const  {Product_Repo} = require('../repository/index')
 const  ordersService = require('./ordersService')
-
+const {  ServiceError} = require('../utlis/index')
 
 class adminService extends CurdService {
     constructor(){
@@ -15,7 +15,11 @@ class adminService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -27,7 +31,11 @@ class adminService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
-            throw error;
+           if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 

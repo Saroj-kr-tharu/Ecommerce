@@ -1,6 +1,6 @@
 const CURD_REPO = require("./curdRepo");
 const { Order, User, Product, OrderItem } = require("../models/index");
-
+const { AppError, HttpsStatusCodes} = require('../utlis/index')
 
 class OrderRepo extends CURD_REPO { 
 
@@ -16,6 +16,7 @@ class OrderRepo extends CURD_REPO {
                     userId:id,
                 },
 
+                
                 include: [
                     {
                     model: User,
@@ -42,8 +43,13 @@ class OrderRepo extends CURD_REPO {
                 return orders;
 
         } catch (error) {
-            console.log("something went wrong in Repo curd level (delete) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched ALL Order BY User Id  ',
+                'Issue in updating By ID in OrderRepo',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
 
@@ -77,7 +83,13 @@ class OrderRepo extends CURD_REPO {
 
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched all orders ',
+                'Issue in fetching all orders in OrderRepo REPO',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
 

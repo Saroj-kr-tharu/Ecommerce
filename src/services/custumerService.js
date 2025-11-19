@@ -1,7 +1,7 @@
 const CurdService = require('./curdService')
 const  {Product_Repo, Orders_Repo} = require('../repository/index')
 const { Order, OrderItem, Product, sequelize } = require("../models");
-
+const {  ServiceError, AppError, HttpsStatusCodes} = require('../utlis/index')
 
 class custumerService extends CurdService {
     constructor(){
@@ -17,7 +17,11 @@ class custumerService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (getById) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -35,14 +39,35 @@ class custumerService extends CurdService {
                 const product = await Product.findByPk(item.productId, { transaction: t });
 
                 // check product exist
-                if (!product) throw new Error(`Product with ID ${item.productId} not found`);
+                if (!product) 
+                    throw new AppError(
+                        'add Orders Errors',
+                        `Product with ID ${item.productId} not found`,
+                        'Issue in getting product in custumerService in  addOrders function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
+
                 // check the qunatity is 0
-                if (item.quantity == 0 ) throw new Error(`Product  name ${product.name} fortend put 0 quantity`);
+                if (item.quantity == 0 ) 
+                    throw new AppError(
+                        'check Quantity Errors',
+                        `Product  name ${product.name} fortend put 0 quantity`,
+                        'Issue in qunatity in custumerService in  addOrders function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
 
 
                 // check stock 
                 if (product.stock < item.quantity)
-                    throw new Error(`Not enough stock for product ${product.name}`);
+                    throw new AppError(
+                        'add Orders Errors',
+                        `Not enough stock for product ${product.name}`,
+                        'Issue in stock of  product in custumerService in  addOrders function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
 
                 // add to product
                 products.push(product);
@@ -126,7 +151,11 @@ class custumerService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (add) ")
-            throw error;
+           if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -135,11 +164,15 @@ class custumerService extends CurdService {
         try {
             const offset = (page - 1) * limit;
             const res = await Orders_Repo.getByUserId(offset, limit, id);
+            // const res = await Orders_Repo.getByUserId();
             return res; 
 
         } catch (error) {
-            console.log("something went wrong in service curd level  (getById) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 

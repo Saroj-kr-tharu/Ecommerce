@@ -1,5 +1,5 @@
 const {userService} = require('../services/index')
-const {SucessCode,ServerErrosCodes} = require('../utlis/errors_codes')
+const {SucessCode} = require('../utlis/Errors/https_codes')
 
 class AuthController { 
 
@@ -19,11 +19,12 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (signup) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -44,11 +45,11 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (signup) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -69,11 +70,11 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (verifytoken) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }

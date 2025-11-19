@@ -1,6 +1,7 @@
 
 const {custumerService} = require('../services/index')
-const {SucessCode,ServerErrosCodes} = require('../utlis/errors_codes')
+const {SucessCode,ServerErrosCodes} = require('../utlis/Errors/https_codes')
+const { AppError, HttpsStatusCodes} = require('../utlis/index')
 
 class CustumerControllers { 
 
@@ -29,11 +30,11 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (add) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -62,11 +63,11 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (addordres) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to add Orders",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -77,7 +78,14 @@ class CustumerControllers {
             const {page, limit, id } = req?.query;
 
             if ( !id){
-                throw new  error(" required is not mention  ")
+
+                throw new AppError(
+                'controller Error',
+                'Cannot have id from user    ',
+                'Issue in gettting  ID in custumer controller',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
             }
 
             const response = await custumerService.getOrders(page,limit,id);
@@ -91,11 +99,11 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (getOrdersByUserId) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to fetched Orders",
-                success: false,
+            return res.status(error.statusCode ).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }

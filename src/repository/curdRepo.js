@@ -1,3 +1,5 @@
+const { AppError, HttpsStatusCodes} = require('../utlis/index')
+
 
 class CURD_REPO{
     constructor(model){
@@ -10,7 +12,13 @@ class CURD_REPO{
             return res; 
         } catch (error) {
             console.log("something went wrong in Repo curd level  (create) ")
-            throw error;
+            throw new AppError(
+                    'RepositoryError',
+                    'Cannot create  ',
+                    'Issue in Creating in CURD REPO',
+                    HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
 
@@ -22,7 +30,13 @@ class CURD_REPO{
 
         } catch (error) {
             console.log("something went wrong in Repo curd level (updateById) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot update BY ID ',
+                'Issue in updating By ID in CURD REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
    
@@ -37,7 +51,13 @@ class CURD_REPO{
             return res;
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
-            throw error;
+            throw new AppError(
+                    'RepositoryError',
+                    'Cannot delete BY Email ',
+                    'Issue in deleting By Email in CURD REPO',
+                    HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+                );
         }
     }
    
@@ -50,7 +70,13 @@ class CURD_REPO{
             return res; 
         } catch (error) {
             console.log("something went wrong in Repo curd level (getById) ")
-            throw error;
+            throw new AppError(
+                'RepositoryError',
+                'Cannot get BY ID ',
+                'Issue in fetching By ID in CURD REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
         }
     }
    
@@ -63,7 +89,13 @@ class CURD_REPO{
 
         } catch (error) {
             console.log("something went wrong in Repo curd level (getAll) ")
-            throw error;
+            throw new AppError(
+                    'RepositoryError',
+                    'Cannot GetALL  ',
+                    'Issue in getting all  in CURD REPO',
+                    HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+                );
         }
     }
    

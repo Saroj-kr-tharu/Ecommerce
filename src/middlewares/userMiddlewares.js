@@ -1,5 +1,5 @@
 
-const {ClientErrorsCodes} = require('../utlis/errors_codes')
+const {ClientErrorsCodes} = require('../utlis/Errors/https_codes')
 
 class UserMiddleware {
 

@@ -1,6 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 const { PRIVATEJWT } = require("../config/serverConfig");
+const {AppError, HttpsStatusCodes} = require('./index')
 
 class JWT {
   async createToken(data, time= '10m') {
@@ -12,7 +13,13 @@ class JWT {
       return token;
     } catch (error) {
       console.log("Something went wrong in service layer (creating the token)");
-      throw error;
+      throw new AppError(
+                        'bcrypt Error',
+                        `Creditals invlaid`,
+                        'Issue in verify Creaditials  in bcryptHelper in  Bcrypt_helper_class function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
     }
   }
 
@@ -29,7 +36,13 @@ class JWT {
         throw { error: "TokenExpiredError", message: "Token has expired" };
       } else {
         console.log("Something went wrong in service layer (verify token)");
-        throw error;
+        throw new AppError(
+                        'bcrypt Error',
+                        `Creditals invlaid`,
+                        'Issue in verify Creaditials  in bcryptHelper in  Bcrypt_helper_class function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
       }
     }
   }

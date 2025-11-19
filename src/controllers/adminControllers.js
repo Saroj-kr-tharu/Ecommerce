@@ -1,5 +1,5 @@
 
-const {SucessCode,ServerErrosCodes} = require('../utlis/errors_codes')
+const {SucessCode,ServerErrosCodes} = require('../utlis/Errors/https_codes')
 const {adminService, orderService} = require('../services/index')
 
 class AdminController { 
@@ -21,11 +21,11 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (add) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -47,11 +47,11 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (edit products) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to update products ",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -72,11 +72,11 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (delete product) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode ).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -96,11 +96,11 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (getallOrders) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }
@@ -124,11 +124,11 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (update orders) ")
-            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
-                message: "Failed to Signup",
-                success: false,
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
                 data: {},
-                err: error.message || error,
+                err: error.explanation,
             });
         }
     }

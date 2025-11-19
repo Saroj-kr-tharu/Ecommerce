@@ -3,6 +3,7 @@ const  USER_REPO = require('../repository/userRepo')
 
 const bcryptHelper = require('../utlis/bcryptHelper');
 const {jwt_helper} = require('../utlis/jwtHelper');
+const {  ServiceError} = require('../utlis/index')
 
 class userService extends CurdService {
     constructor(){
@@ -18,7 +19,14 @@ class userService extends CurdService {
 
             const isValid = await bcryptHelper.checkPasswordService(password, hashpassword );
             
-            if(!isValid)  throw new error("Invalid Credetials")
+            if(!isValid)  
+                throw new AppError(
+                        'Login Errors',
+                        `Invalid Creditials`,
+                        'Issue in login  in userService in  login service function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
 
 
             const token = await jwt_helper.createToken({...data, id: infoUser?.dataValues?.id,});
@@ -35,7 +43,11 @@ class userService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
@@ -46,9 +58,14 @@ class userService extends CurdService {
 
             const res = await jwt_helper.verifyToken(data);
 
-             if (!res){
-                throw new error(' token expeired ')
-            }
+             if (!res)
+                throw new AppError(
+                        'Verify Token Errors',
+                        `Token is invalid or Expired`,
+                        'Issue in verifying token in userService in  verifyToken function ',
+                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+                    );
             
             const infoUser = await USER_REPO.getByEmail(res.data.email);
             const response = {
@@ -63,7 +80,11 @@ class userService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (verifyToken) ")
-            throw error;
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
         }
     }
 
