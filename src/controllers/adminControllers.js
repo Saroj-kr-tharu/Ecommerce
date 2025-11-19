@@ -1,6 +1,6 @@
 
 const {SucessCode,ServerErrosCodes} = require('../utlis/Errors/https_codes')
-const {adminService, orderService} = require('../services/index')
+const {adminService, orderService, userService} = require('../services/index')
 
 class AdminController { 
 
@@ -124,6 +124,38 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (update orders) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+
+     async getAllUsers(req,res) {
+        try {
+            
+            const {page,limit,email,role,username} = req?.query;
+            
+            const data = {
+                email: email || null,
+                role: role || null,
+                username: username || null,
+            };
+            
+            const response = await userService.getAllUserPagtion(parseInt(page),parseInt(limit),data);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all users",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  ( getAllUsers) ")
             return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,

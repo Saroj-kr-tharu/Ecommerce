@@ -10,7 +10,7 @@ class UserREpo extends CURD_REPO {
 
     async getByEmail (email) { 
         try {
-            const res = await this.model.findOne({
+            const res = await User.findOne({
                 where: {email},
             });
             return res; 
@@ -25,6 +25,47 @@ class UserREpo extends CURD_REPO {
             );
         }
     }
+
+    #createFilter(data){
+           let filter = {};
+   
+           if(data.email){
+               filter.email = data.email
+           }
+   
+           if(data.username){
+               filter.username = data.username
+           }
+   
+           if(data.role){
+               filter.role = data.role
+           }
+   
+           return filter;
+   
+   
+       }
+       
+       async getALLUserProPagation (offset, limit, data) { 
+           
+           try {
+            
+                 const filter =  this.#createFilter(data)
+                //  console.log(filter, 'data => ', data )
+   
+                 const res = await User.findAndCountAll({ where: filter,  offset, limit });
+                 return res;
+           } catch (error) {
+               console.log("something went wrong in Repo curd level (getALLUserProPagation) ")
+               throw new AppError(
+                   'RepositoryError',
+                   'Cannot fetched users by filter ',
+                   'Issue in fetching  in userRepo REPO',
+                   HttpsStatusCodes.INTERNAL_SERVER_ERROR
+   
+               );
+           }
+       }
 
 }
 

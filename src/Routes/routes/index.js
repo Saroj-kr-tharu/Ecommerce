@@ -24,6 +24,7 @@ router.delete( "/products/delete", adminMiddleware.verifyToken, adminController.
 router.patch( "/products/update", adminMiddleware.verifyToken, adminController.editProduct );
 router.get( "/orders",  adminMiddleware.verifyToken, adminController.getAllOrders );
 router.patch( "/orders/update",  adminMiddleware.verifyToken, adminController.editOrders );
+router.get( "/users",  adminMiddleware.verifyToken, adminController.getAllUsers );
 
 // custumer 
 router.get( "/products",  CustumerControllers.getProduct );

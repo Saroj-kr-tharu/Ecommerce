@@ -85,7 +85,28 @@ class userService extends CurdService {
             throw new ServiceError()
         }
     }
+    
+    async getAllUserPagtion( page, limit, data){
+        try {
+           
+            
+            const offset = (page - 1) * limit;
+            const response = await USER_REPO.getALLUserProPagation(offset, limit, data);
 
+           
+            
+            return response;
+            
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getAllUser) ")
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
 }
 
 const userservice= new userService()
