@@ -54,8 +54,6 @@ class userService extends CurdService {
     async verifyToken(data){
         try {
            
-
-
             const res = await jwt_helper.verifyToken(data);
 
              if (!res)

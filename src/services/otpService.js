@@ -1,15 +1,15 @@
+const sender = require("../config/emailConfig");
+
 const CurdService = require('./curdService')
 const  {USER_REPO, OTP_Repo} = require('../repository/index')
 
 const bcryptHelper = require('../utlis/bcryptHelper');
 const {jwt_helper} = require('../utlis/jwtHelper');
+const generateOtpEmail = require('../utlis/MailTemplate/otpTempalte')
 const {  AppError, HttpsStatusCodes, ServiceError} = require('../utlis/index');
 
-const generateOtpEmail = require('../utlis/MailTemplate/otpTempalte')
 
 
-const sender = require("../config/emailConfig");
-const { text } = require('body-parser');
 
 class OTPService extends CurdService {
     constructor(){
