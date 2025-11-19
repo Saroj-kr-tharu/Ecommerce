@@ -155,7 +155,7 @@ class custumerService extends CurdService {
                 throw error;
             }
 
-            throw new ServiceError()
+            throw error
         }
     }
 
@@ -164,7 +164,7 @@ class custumerService extends CurdService {
         try {
             const offset = (page - 1) * limit;
             const res = await Orders_Repo.getByUserId(offset, limit, id);
-            // const res = await Orders_Repo.getByUserId();
+            
             return res; 
 
         } catch (error) {

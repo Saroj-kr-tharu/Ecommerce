@@ -21,7 +21,7 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (add) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR ).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -47,7 +47,7 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (edit products) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR ).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -72,7 +72,7 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (delete product) ")
-            return res.status(error.statusCode ).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR ).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -96,7 +96,7 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (getallOrders) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -124,7 +124,7 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (update orders) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},

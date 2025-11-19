@@ -30,7 +30,7 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (add) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -63,7 +63,7 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (addordres) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -99,7 +99,7 @@ class CustumerControllers {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (getOrdersByUserId) ")
-            return res.status(error.statusCode ).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR ).json({
                 message: error.message,
                 sucess: false,
                 data: {},

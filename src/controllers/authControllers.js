@@ -20,7 +20,7 @@ class AuthController {
         } catch (error) {
             console.log("something went wrong in controller  level  (signup) ")
 
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -45,7 +45,7 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (signup) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -70,7 +70,7 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (signup) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -96,7 +96,7 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (verify OTP) ", error)
-            return res.status(error.statusCode | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},
@@ -121,7 +121,7 @@ class AuthController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (verifytoken) ")
-            return res.status(error.statusCode).json({
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
                 data: {},

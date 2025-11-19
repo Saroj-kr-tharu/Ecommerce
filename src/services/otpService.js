@@ -39,6 +39,13 @@ class OTPService extends CurdService {
     async sendOTP(email){
         try {
            
+            // 1. get user info from email 
+            // 2. check user is exist 
+            // 3. generate otp 
+            // 4. add userid and expireat 5 min 
+            // 5. create row 
+            // 6. send otp 
+            
             const infoUser = await USER_REPO.getByEmail(email);
 
             if(!infoUser)  
@@ -78,7 +85,7 @@ class OTPService extends CurdService {
                 throw error;
             }
 
-            throw new ServiceError()
+            throw error
         }
     }
 
