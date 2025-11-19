@@ -21,9 +21,6 @@ const userservice = require('../services/userService');
             if(!response) throw new error
             next();
             
-
-        
-
             
             } catch (error) {
             return res.status(ClientErrorsCodes.UNAUTHORISED).json({

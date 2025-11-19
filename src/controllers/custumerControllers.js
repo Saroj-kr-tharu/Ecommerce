@@ -71,7 +71,34 @@ class CustumerControllers {
         }
     }
     
-    
+      async getOrdersByUserId(req,res) {
+        try {
+            
+            const {page, limit, id } = req?.query;
+
+            if ( !id){
+                throw new  error(" required is not mention  ")
+            }
+
+            const response = await custumerService.getOrders(page,limit,id);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all Orders ",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (getOrdersByUserId) ")
+            return res.status(ServerErrosCodes.NOT_IMPLEMENTED).json({
+                message: "Failed to fetched Orders",
+                success: false,
+                data: {},
+                err: error.message || error,
+            });
+        }
+    }
 
 }
 

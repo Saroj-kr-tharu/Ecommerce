@@ -1,5 +1,5 @@
 const CurdService = require('./curdService')
-const  {Product_Repo} = require('../repository/index')
+const  {Product_Repo, Orders_Repo} = require('../repository/index')
 const { Order, OrderItem, Product, sequelize } = require("../models");
 
 
@@ -36,6 +36,9 @@ class custumerService extends CurdService {
 
                 // check product exist
                 if (!product) throw new Error(`Product with ID ${item.productId} not found`);
+                // check the qunatity is 0
+                if (item.quantity == 0 ) throw new Error(`Product  name ${product.name} fortend put 0 quantity`);
+
 
                 // check stock 
                 if (product.stock < item.quantity)
@@ -127,6 +130,18 @@ class custumerService extends CurdService {
         }
     }
 
+
+     async getOrders(page, limit , id){
+        try {
+            const offset = (page - 1) * limit;
+            const res = await Orders_Repo.getByUserId(offset, limit, id);
+            return res; 
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getById) ")
+            throw error;
+        }
+    }
 
 
 

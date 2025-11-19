@@ -7,18 +7,7 @@ class OrdersItemsService extends CurdService {
         super(Product_Repo)
     }
 
-    async getProduct(page, limit, data){
-        try {
-
-            const offset = (page - 1) * limit;
-            const res = await Product_Repo.getProPagation(offset,limit, data);
-            return res; 
-
-        } catch (error) {
-            console.log("something went wrong in service curd level  (getById) ")
-            throw error;
-        }
-    }
+    
 
 
 }

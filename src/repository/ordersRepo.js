@@ -8,6 +8,45 @@ class OrderRepo extends CURD_REPO {
         super(Order)
     }
 
+    async getByUserId (offset, limit,  id ) { 
+        try {
+            
+              const orders = await Order.findAll({
+                where: {
+                    userId:id,
+                },
+
+                include: [
+                    {
+                    model: User,
+                    as: 'user', 
+                    attributes: ['id', 'username', 'email']
+                    },
+                    {
+                    model: OrderItem,
+                    include: [
+                        {
+                        model: Product,
+                        attributes: ['id', 'name', 'price', 'stock']
+                        }
+                    ]
+                    }
+                ], 
+
+                offset: parseInt(offset) || 0,
+                limit: parseInt(limit) || 10,
+                order: [['createdAt', 'DESC']]
+
+                });
+
+                return orders;
+
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (delete) ")
+            throw error;
+        }
+    }
+
     async getAllOrders (offset, limit) { 
         try {
               const orders = await Order.findAll({

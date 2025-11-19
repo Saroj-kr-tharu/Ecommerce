@@ -26,7 +26,8 @@ router.patch( "/orders/update",  adminMiddleware.verifyToken, adminController.ed
 // custumer 
 router.get( "/products",  CustumerControllers.getProduct );
 router.post( "/orders/addOrder",  custumerMiddleware.verifyToken, CustumerControllers.addOrders );
+router.get( "/orders/getByUser",  custumerMiddleware.verifyToken, CustumerControllers.getOrdersByUserId );
  
-
-
+ 
+ 
 module.exports = router;

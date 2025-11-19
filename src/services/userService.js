@@ -21,7 +21,7 @@ class userService extends CurdService {
             if(!isValid)  throw new error("Invalid Credetials")
 
 
-            const token = await jwt_helper.createToken(data);
+            const token = await jwt_helper.createToken({...data, id: infoUser?.dataValues?.id,});
             const response = {
                 email: data.email,
                 id: infoUser?.dataValues?.id,
