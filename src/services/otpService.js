@@ -5,8 +5,11 @@ const bcryptHelper = require('../utlis/bcryptHelper');
 const {jwt_helper} = require('../utlis/jwtHelper');
 const {  AppError, HttpsStatusCodes, ServiceError} = require('../utlis/index');
 
+const generateOtpEmail = require('../utlis/MailTemplate/otpTempalte')
+
 
 const sender = require("../config/emailConfig");
+const { text } = require('body-parser');
 
 class OTPService extends CurdService {
     constructor(){
@@ -19,7 +22,8 @@ class OTPService extends CurdService {
                     from: mailFrom,
                     to: mailTo,
                     subject: mailSubject,
-                    text: mailBody,
+                    html: mailBody,
+                    text:"" ,
                 });
 
                 return response
@@ -45,7 +49,7 @@ class OTPService extends CurdService {
             // 4. add userid and expireat 5 min 
             // 5. create row 
             // 6. send otp 
-            
+
             const infoUser = await USER_REPO.getByEmail(email);
 
             if(!infoUser)  
@@ -66,7 +70,7 @@ class OTPService extends CurdService {
 
             // Send OTP 
             const mailFrom = "sarojtestingkrtharu@gmail.com"
-            const response = await this.#sendEmail(mailFrom, email, "otp", `OTP : ${code}`);
+            const response = await this.#sendEmail(mailFrom, email, "otp", generateOtpEmail(code));
             if(!response) 
                 throw new AppError(
                         'OTP Sent Errors',
