@@ -16,7 +16,21 @@ class UserMiddleware {
 
       next();
     };
+    
+    verifyOTP  (req, res, next) {
 
+       if (!req?.query?.email || !req.query.otp ) {
+         console.log("Something went wrong in auth middleware");
+         
+         return res.status(ClientErrorsCodes.BAD_REQUEST).json({
+           data: {},
+           message: "otp or email is missing  ",
+           success: false,
+         });
+       }
+ 
+       next();
+     };
 
     verifyToken  (req, res, next)  {
         const token = req?.headers['x-access-token'];

@@ -1,5 +1,5 @@
-const {userService} = require('../services/index')
-const {SucessCode} = require('../utlis/Errors/https_codes')
+const {userService, otpService} = require('../services/index')
+const {SucessCode, ServerErrosCodes} = require('../utlis/Errors/https_codes')
 
 class AuthController { 
 
@@ -54,7 +54,58 @@ class AuthController {
         }
     }
 
-     async veriyToken(req,res) {
+    async loginByOTP(req,res) {
+        try {
+            
+            
+            const {email} = req?.query;
+            const response = await otpService.sendOTP(email);
+            
+            return res.status(SucessCode.CREATED).json({
+                message: "Successfully to Sent OTP ",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (signup) ")
+            return res.status(error.statusCode).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+    async VerifyOTP(req,res) {
+        try {
+            
+            
+            const {email, otp} = req?.query;
+            
+            const response = await otpService.verifyOTP(email, otp);
+            
+            return res.status(SucessCode.CREATED).json({
+                message: "Sucessfully login   ",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (verify OTP) ", error)
+            return res.status(error.statusCode | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+    async veriyToken(req,res) {
         try {
             
             

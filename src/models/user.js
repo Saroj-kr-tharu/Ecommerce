@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         as: 'orders'
       });
 
+      User.hasMany(models.OTP, {
+        foreignKey: 'userId',
+        as: 'otps'
+      });
+
     }
   }
   User.init({

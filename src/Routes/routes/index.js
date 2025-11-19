@@ -15,6 +15,8 @@ router.get("/ping", (req, res) => {
 router.get( "/auth/signup", userMiddleware.signupAndLogin, authController.signup );
 router.post( "/auth/login", userMiddleware.signupAndLogin, authController.signin );
 router.get( "/auth/veriyToken", userMiddleware.verifyToken, authController.veriyToken );
+router.post( "/auth/login/otp", authController.loginByOTP );
+router.post( "/auth/login/otp-verify", userMiddleware.verifyOTP, authController.VerifyOTP );
 
 // admin 
 router.post( "/products/add",adminMiddleware.verifyToken,  adminController.addProduct );

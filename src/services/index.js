@@ -6,5 +6,6 @@ module.exports = {
     custumerService : require('./custumerService'),
     orderItemService : require('./ordersItemsService'),
     orderService : require('./ordersService'),
+    otpService : require('./otpService'),
     
 }

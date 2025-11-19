@@ -11,7 +11,7 @@ class CURD_REPO{
             const res = await this.model.create(data);
             return res; 
         } catch (error) {
-            console.log("something went wrong in Repo curd level  (create) ")
+            console.log("something went wrong in Repo curd level  (create) ", error)
             throw new AppError(
                     'RepositoryError',
                     'Cannot create  ',
