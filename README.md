@@ -578,26 +578,7 @@ curl http://localhost:3000/api/v1/products
 2. Set base URL: `http://localhost:3000/api/v1`
 3. For protected routes, add Authorization header: `Bearer <token>`
 
-### Test Scenarios
-- ✅ User registration and login
-- ✅ JWT token verification
-- ✅ OTP generation and verification  
-- ✅ Product CRUD operations (Admin)
-- ✅ Order creation and management
-- ✅ Role-based access control
-- ✅ Error handling and validation
 
-### Future Testing Plans
-```bash
-# Unit tests (to be implemented)
-npm test
-
-# Integration tests (to be implemented) 
-npm run test:integration
-
-# Coverage reports (to be implemented)
-npm run test:coverage
-```
 
 ---
 
@@ -618,17 +599,7 @@ NODE_ENV=production npx sequelize-cli db:migrate
 NODE_ENV=production npx sequelize-cli db:seed:all
 ```
 
-### Docker Deployment (Future)
-```dockerfile
-# Example Dockerfile structure
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install --only=production
-COPY . .
-EXPOSE 3000
-CMD ["node", "src/index.js"]
-```
+
 
 ---
 
@@ -706,9 +677,7 @@ Error: Sequelize CLI [Node: 18.x.x, CLI: 6.x.x, ORM: 6.x.x]
 Import our Postman collection for easy API testing:
 [Download Postman Collection](link-to-postman-collection)
 
-### Swagger Documentation (Future)
-Interactive API documentation will be available at:
-`http://localhost:3000/api/docs`
+
 
 ---
 
@@ -718,27 +687,7 @@ This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 🆘 Support & Contact
 
-- **📧 Email:** [support@ecommerce.com](mailto:support@ecommerce.com)
-- **🐛 Issues:** [GitHub Issues](https://github.com/Saroj-kr-tharu/Ecommerce/issues)
-- **💬 Discussions:** [GitHub Discussions](https://github.com/Saroj-kr-tharu/Ecommerce/discussions)
-
----
-
-## 🔄 Version History
-
-| Version | Date | Description |
-|---------|------|-------------|
-| **v1.0.0** | Nov 2024 | 🎉 Initial release with core ecommerce functionality |
-| | | • User authentication & authorization system |
-| | | • Product and order management |
-| | | • Admin panel features |
-| | | • OTP-based login system |
-| | | • Role-based access control |
-| | | • Email integration |
-
----
 
 ## 🙏 Acknowledgments
 

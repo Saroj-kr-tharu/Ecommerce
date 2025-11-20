@@ -43,12 +43,10 @@ class CURD_REPO{
 
     async delete (email) { 
         try {
-              const res = await this.model.destroy({
-                    where: {
-                    email
-                    },
-                });
-            return res;
+              const res = await this.model.destroy( { where: { email }, } );
+                return res;
+
+                
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
             throw new AppError(

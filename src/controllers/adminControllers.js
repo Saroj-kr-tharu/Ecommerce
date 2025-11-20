@@ -33,7 +33,6 @@ class AdminController {
     async editProduct(req,res) {
         try {
             
-            
             const data = req?.body;
             const id = req?.query?.id;
             const response = await adminService.updateService(data, id);

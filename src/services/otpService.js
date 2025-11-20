@@ -163,10 +163,7 @@ class OTPService extends CurdService {
 
             
             return {
-                email,
-                id: infoUser?.dataValues?.id,
-                role: infoUser?.dataValues?.role,
-                username: infoUser?.dataValues?.username,
+                ...data,
                 token
             };
             
