@@ -703,15 +703,12 @@ This project is licensed under the **ISC License** - see the [LICENSE](LICENSE) 
 
 - [ ] 📊 Advanced analytics and reporting
 - [ ] 🔍 Enhanced product search with Elasticsearch
-- [ ] 💳 Payment gateway integration (Stripe/PayPal)
+- [ ] 💳 Payment gateway integration (Stripe/eSewa/Khalti)
 - [ ] 📱 Mobile app API optimization
-- [ ] 🚀 Redis caching implementation
-- [ ] 📊 GraphQL API support
 - [ ] 🔄 Real-time notifications with WebSockets
 - [ ] 📈 Performance monitoring and logging
-- [ ] 🧪 Comprehensive testing suite
 - [ ] 🐳 Docker containerization
-- [ ] ☁️ Cloud deployment guides (AWS/GCP/Azure)
+- [ ] ☁️ Cloud deployment guides (AWS)
 
 ---
 
