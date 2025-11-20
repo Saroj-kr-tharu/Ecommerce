@@ -44,7 +44,7 @@ class AuthController {
             });
 
         } catch (error) {
-            console.log("something went wrong in controller  level  (signup) ")
+            console.log("something went wrong in controller  level  (signup) ", error )
             return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
