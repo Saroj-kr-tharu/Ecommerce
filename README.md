@@ -13,498 +13,120 @@ A production-ready Node.js REST API for modern ecommerce platforms. Built with E
 - **Docker Support** for easy deployment
 - **CI/CD Pipeline** with GitHub Actions
 
-## ✨ Core Features That Set Us Apart
-
-### 🔐 **Authentication & Security First**
-  - **JWT-powered authentication** - Industry-standard token-based authentication that scales
-  - **OTP-enhanced login** - Extra layer of security with email-based verification codes  
-  - **Role-based access control** - Granular permissions for Admin, Customer, and User roles
-  - **Bcrypt password protection** - Military-grade password hashing with salt
-  - **Smart token management** - Automatic token verification and refresh capabilities
-
-### 👑 **Powerful Admin Dashboard Backend**
-  - **Complete product management** - Full CRUD operations for your product catalog
-  - **Order oversight and control** - Manage orders, update statuses, and track fulfillment
-  - **Administrative insights** - Dashboard-ready endpoints for business intelligence
-  - **Protected admin routes** - Secure middleware ensuring only admins can access sensitive operations
-
-### 👥 **Delightful Customer Experience**
-  - **Seamless user registration** - Quick and easy onboarding with email verification
-  - **Intelligent product discovery** - Advanced filtering by category, price, brand, and ratings
-  - **Streamlined order placement** - Simple cart-to-checkout flow with real-time inventory checking
-  - **Order history and tracking** - Complete transparency of purchase history and status updates
-
-### 📦 **Smart Product Management**
-  - **Comprehensive product lifecycle** - From creation to retirement, handle every stage
-  - **Flexible categorization** - Organize products the way that makes sense for your business
-  - **Real-time inventory tracking** - Never oversell with accurate stock management
-  - **Advanced search capabilities** - Help customers find exactly what they're looking for
-
-### 🛍️ **Sophisticated Order Processing**
-  - **End-to-end order management** - From placement to delivery tracking
-  - **Detailed order items** - Line-by-line breakdown of every purchase
-  - **Status workflow management** - Track orders through every stage of fulfillment
-  - **Customer order portal** - Self-service order history and status checking
-
-### 📧 **Professional Communication**
-  - **Reliable email delivery** - Integrated Nodemailer with fallback options
-  - **Beautiful OTP emails** - Professional email templates that build trust
-  - **Customizable templates** - Easy to modify email designs for your brand
-
-### 🗄️ **Bulletproof Database Design**
-  - **Sequelize ORM excellence** - Modern database operations with MySQL
-  - **Version-controlled migrations** - Track and deploy database changes safely
-  - **Intelligent seeders** - Bootstrap your database with sample data
-  - **Optimized relationships** - Properly designed associations for performance
-
-## 🏗️ Architecture That Scales
-
-This project is built on a **proven layered architecture** that separates concerns beautifully and implements the **repository pattern** for clean, maintainable data access. Whether you're a solo developer or part of a growing team, this structure will keep your code organized and your sanity intact.
+## 🏗️ Project Structure
 
 ```
-📁 Project Structure
-├── 📄 package.json                     # Dependencies and npm scripts
-├── 📄 README.md                        # Comprehensive documentation
-├── 📄 docker-compose.yml               # 🐳 Multi-container Docker setup
-├── 📄 Dockerfile                       # 🐳 Node.js application container
-├── 📁 .github/workflows/              # 🔄 CI/CD Pipeline
-│   └── CiCDPipeline.yml               # GitHub Actions deployment workflow
-└── 📁 src/                            # Source code directory
-    ├── 📄 index.js                    # Application entry point & Express server
-    │
-    ├── 📁 config/                     # Configuration management
-    │   ├── config.json                # Database configuration (MySQL)
-    │   ├── docker-config.json         # Docker-specific database config
-    │   ├── emailConfig.js             # Nodemailer email service setup
-    │   └── serverConfig.js            # Server settings & environment variables
-    │
-    ├── 📁 controllers/                # 🎮 HTTP request handlers
-    │   ├── adminControllers.js        # Admin operations (products, orders)
-    │   ├── authControllers.js         # Authentication & OTP operations
-    │   ├── custumerControllers.js     # Customer-specific operations
-    │   └── index.js                   # Controller module exports
-    │
-    ├── 📁 middlewares/                # 🛡️ Custom middleware functions
-    │   ├── adminMiddlewares.js        # Admin authentication & authorization
-    │   ├── custumerMiddlewares.js     # Customer authentication middleware
-    │   ├── userMiddlewares.js         # General user authentication
-    │   └── index.js                   # Middleware module exports
-    │
-    ├── 📁 models/                     # 🗃️ Sequelize database models
-    │   ├── user.js                    # User model with role management
-    │   ├── product.js                 # Product model with inventory
-    │   ├── order.js                   # Order model with status tracking
-    │   ├── orderitem.js               # Order items for order details
-    │   ├── otp.js                     # OTP model for 2FA verification
-    │   └── index.js                   # Model associations & exports
-    │
-    ├── 📁 migrations/                 # 📊 Database schema migrations (v1.0)
-    │   ├── 20251117070636-create-user.js      # User table with roles
-    │   ├── 20251117161350-create-product.js   # Product catalog table
-    │   ├── 20251118064421-create-order.js     # Order management table
-    │   ├── 20251118083222-create-order-item.js # Order items relationship
-    │   └── 20251119085224-create-otp.js       # OTP security table
-    │
-    ├── 📁 seeders/                    # 🌱 Database seed data
-    │   └── 20251118052706-Products.js # Sample products for testing
-    │
-    ├── 📁 repository/                 # 📂 Data access layer (Repository Pattern)
-    │   ├── curdRepo.js                # Generic CRUD operations base
-    │   ├── userRepo.js                # User data access methods
-    │   ├── productRepo.js             # Product data operations
-    │   ├── ordersRepo.js              # Order data management
-    │   ├── ordersItemRepo.js          # Order items data operations
-    │   ├── otpRepo.js                 # OTP data access methods
-    │   └── index.js                   # Repository module exports
-    │
-    ├── 📁 services/                   # 🏗️ Business logic layer
-    │   ├── adminService.js            # Admin business operations
-    │   ├── userService.js             # User business logic
-    │   ├── custumerService.js         # Customer business operations
-    │   ├── ordersService.js           # Order processing logic
-    │   ├── ordersItemsService.js      # Order items business logic
-    │   ├── otpService.js              # OTP generation & validation
-    │   ├── curdService.js             # Generic CRUD service operations
-    │   └── index.js                   # Service module exports
-    │
-    ├── 📁 Routes/                     # 🌐 API route definitions
-    │   ├── index.js                   # Main Express router configuration
-    │   └── 📁 routes/                 # Route modules
-    │       └── index.js               # RESTful API endpoint definitions
-    │
-    └── 📁 utlis/                      # 🛠️ Utility functions and helpers
-        ├── bcryptHelper.js            # Password hashing & validation
-        ├── jwtHelper.js               # JWT token generation & verification
-        ├── index.js                   # Utility module exports
-        ├── 📁 Errors/                 # 🚨 Custom error handling system
-        │   ├── AppErrors.js           # Application-specific error classes
-        │   ├── https_codes.js         # HTTP status code constants
-        │   ├── ServiceErrors.js       # Service layer error definitions
-        │   └── ValidationErros.js     # Input validation error handling
-        └── 📁 MailTemplate/           # 📧 Email template management
-            └── otpTempalte.js         # OTP email HTML template
+📁 src/
+├── 📄 index.js                    # Application entry point
+├── 📁 config/                     # Configuration files
+│   ├── config.json                # Database configuration
+│   ├── docker-config.json         # Docker database config
+│   ├── emailConfig.js             # Email service setup
+│   └── serverConfig.js            # Server settings
+├── 📁 controllers/                # HTTP request handlers
+├── 📁 middlewares/                # Authentication & authorization
+├── 📁 models/                     # Sequelize database models
+├── 📁 migrations/                 # Database schema migrations
+├── 📁 repository/                 # Data access layer
+├── 📁 services/                   # Business logic layer
+├── 📁 Routes/                     # API route definitions
+└── 📁 utlis/                      # Utilities and helpers
+    ├── 📁 Errors/                 # Error handling
+    └── 📁 MailTemplate/           # Email templates
 ```
+## 🚀 Quick Start
 
-### 🏛️ The Five Pillars of Our Architecture
+### Prerequisites
+- Node.js (v14 or higher)
+- MySQL (v8.0 or higher)
+- npm or yarn
 
-Think of our architecture like a well-organized building - each floor has its specific purpose, and information flows smoothly between them:
+### Installation
 
-1. **🌐 Routes Layer** - The reception desk: handles incoming requests and directs them appropriately
-2. **🎮 Controllers Layer** - The managers: process requests, coordinate responses, and handle user interactions  
-3. **🏗️ Services Layer** - The brain: contains all your business logic and decision-making
-4. **📊 Repository Layer** - The librarian: manages all data access and database operations cleanly
-5. **🗃️ Models Layer** - The foundation: defines your data structure and relationships
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Saroj-kr-tharu/Ecommerce.git
+   cd Ecommerce/01_Backend
+   ```
 
-## 🚀 Getting Started - From Zero to Hero
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-Ready to get this powerful ecommerce backend up and running? We've made it as simple as possible. Whether you're a seasoned developer or just starting out, you'll be serving API requests in minutes, not hours.
+3. **Environment setup**
+   Create a `.env` file:
+   ```env
+   PORT=3000
+   NODE_ENV=development
+   PRIVATEJWT=your_jwt_secret_key
+   EMAIL_ID=your-email@gmail.com
+   EMAIL_PASS=your-app-password
+   ```
 
-### 📋 What You'll Need Before We Begin
-- **Node.js** (v14 or higher) - The JavaScript runtime that powers our backend
-- **MySQL** (v8.0 or higher) - Our reliable database engine  
-- **npm** or **yarn** - For managing our project dependencies
-- **Git** - To clone the repository (optional: **Docker** for containerized setup)
+4. **Database setup**
+   Update `src/config/config.json` with your MySQL credentials:
+   ```json
+   {
+     "development": {
+       "username": "your_mysql_username",
+       "password": "your_mysql_password",
+       "database": "ecommerce",
+       "host": "127.0.0.1",
+       "dialect": "mysql"
+     }
+   }
+   ```
 
-### 1️⃣ Get the Code
+5. **Run migrations**
+   ```bash
+   npx sequelize-cli db:migrate
+   npx sequelize-cli db:seed:all
+   ```
+
+6. **Start the server**
+   ```bash
+   npm start
+   ```
+
+### Docker Setup (Recommended)
 ```bash
-git clone https://github.com/Saroj-kr-tharu/Ecommerce.git
-cd Ecommerce/01_Backend
-```
-
-### 2️⃣ Install the Magic ✨
-```bash
-npm install
-```
-*This installs all the carefully selected dependencies that make our API powerful yet lightweight.*
-
-### 3️⃣ Configure Your Environment
-Create a `.env` file in the root directory - this is where we keep our secrets safe:
-
-```env
-# Server Configuration - Customize as needed
-PORT=3000
-NODE_ENV=development
-
-# JWT Security - Use a long, random string in production  
-PRIVATEJWT=your_super_secret_jwt_key_here_make_it_long_and_random
-
-# Email Configuration - For OTP delivery
-EMAIL_ID=your-email@gmail.com
-EMAIL_PASS=your-app-password
-
-# Note: Database config lives in src/config/config.json for Sequelize compatibility
-```
-
-> 💡 **Pro Tip**: For Gmail, use an "App Password" rather than your regular password for enhanced security!
-
-### 4️⃣ Database Setup Made Simple
-
-#### 🔧 Configure Your Database Connection
-Update `src/config/config.json` with your MySQL credentials:
-```json
-{
-  "development": {
-    "username": "your_mysql_username",
-    "password": "your_mysql_password", 
-    "database": "ecommerce",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
-}
-```
-
-#### 🗄️ Create Your Database
-```bash
-# Connect to MySQL and create the database
-mysql -u root -p
-CREATE DATABASE ecommerce;
-exit;
-```
-
-#### 🚀 Run Database Migrations
-```bash
-# Install Sequelize CLI globally (one-time setup)
-npm install -g sequelize-cli
-
-# Run our carefully crafted migrations
-npx sequelize-cli db:migrate
-```
-*This creates all 5 tables with proper relationships - Users, Products, Orders, Order Items, and OTP.*
-
-#### 🌱 Seed Sample Data (Optional but Recommended)
-```bash
-# Populate your database with sample products to get started
-npx sequelize-cli db:seed:all
-```
-
-### 5️⃣ Launch Your API Server 
-
-#### 🐳 The Easy Way - Using Docker (Highly Recommended)
-```bash
-# One command to rule them all - starts MySQL + Backend
+# Start with Docker Compose
 docker-compose up -d
 
-# Check everything is running smoothly
-docker-compose logs -f
-
-# When you're done developing
-docker-compose down
+# Server runs at http://localhost:8000
 ```
 
-**What Docker gives you automatically:**
-- **MySQL Database** - Pre-configured and running on port `3308:3306`
-- **Backend API** - Your server running on port `8000:8000`  
-- **Auto-setup** - Database creation, migrations, and sample data - all handled automatically!
+## 📋 API Documentation
 
-#### 🔧 The Developer Way - Local Development
-```bash
-npm start
-```
-*Uses nodemon for hot-reloading - your server restarts automatically when you make changes.*
+Base URL: `http://localhost:3000/api/v1` (Local) or `http://localhost:8000/api/v1` (Docker)
 
-You should see this friendly message:
-```
-Backend server start at 3000
-```
+### Authentication Endpoints
 
-🎉 **Congratulations!** Your ecommerce backend is now live and ready to serve requests at `http://localhost:3000` (or `http://localhost:8000` if using Docker).
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/auth/signup` | User registration |
+| `POST` | `/auth/login` | User login |
+| `POST` | `/auth/login/otp` | Request OTP for login |
+| `POST` | `/auth/login/otp-verify` | Verify OTP |
 
-## 🌐 API Documentation - Your Complete Guide
-
-Our REST API is designed with simplicity and power in mind. Every endpoint is carefully crafted to provide exactly what you need, when you need it, with consistent responses and clear error messages.
-
-**Base URL:** `http://localhost:3000/api/v1` (Local) or `http://localhost:8000/api/v1` (Docker)
-
-### 🩺 Health Check - Is Everything Working?
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `GET` | `/ping` | Quick server health check | ❌ No |
-
-**What you'll get back:**
-```json
-{
-  "message": "Auth Server is good to GO"
-}
-```
-*Perfect for monitoring and load balancer health checks.*
-
----
-
-### 🔐 Authentication - Secure and User-Friendly
+### Product Endpoints
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `GET` | `/auth/signup` | Create a new user account | ❌ No |
-| `POST` | `/auth/login` | Standard email/password login | ❌ No |
-| `GET` | `/auth/veriyToken` | Validate an existing JWT token | 🔑 User Token |
-| `POST` | `/auth/login/otp` | Request OTP for secure login | ❌ No |
-| `POST` | `/auth/login/otp-verify` | Verify OTP and complete login | ❌ No |
+| `GET` | `/products` | Get products with filters | No |
+| `POST` | `/products/add` | Add new product | Admin |
+| `PATCH` | `/products/update` | Update product | Admin |
+| `DELETE` | `/products/delete` | Delete product | Admin |
 
-#### 👤 User Registration (GET `/auth/signup`)
-**Query Parameters:**
-```
-name=John Doe&email=john@example.com&password=securepass123&role=customer
-```
-*Role is optional and defaults to 'customer'. Only admins can create other admins.*
-
-#### 🔑 Standard Login (POST `/auth/login`)  
-**Request Body:**
-```json
-{
-  "email": "john@example.com",
-  "password": "securepass123"
-}
-```
-**Success Response:**
-```json
-{
-  "success": true,
-  "message": "Login successful",
-  "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com",
-      "role": "customer"
-    }
-  }
-}
-```
-
-#### 📱 Enhanced OTP Login (2-Step Process)
-
-**Step 1 - Request OTP (POST `/auth/login/otp`)**
-```json
-{
-  "email": "john@example.com"
-}
-```
-*This sends a 6-digit OTP to the user's email address.*
-
-**Step 2 - Verify OTP (POST `/auth/login/otp-verify`)**
-```json
-{
-  "email": "john@example.com", 
-  "otp": "123456"
-}
-```
-*Returns the same login response format as standard login.*
-
----
-
-### 👑 Admin Operations - Powerful Management Tools
-
-*All admin endpoints require an Admin JWT token in the Authorization header.*
+### Order Endpoints
 
 | Method | Endpoint | Description | Auth Required |
 |--------|----------|-------------|---------------|
-| `POST` | `/products/add` | Create a new product | 🔑 Admin Token |
-| `PATCH` | `/products/update` | Update existing product | 🔑 Admin Token |
-| `DELETE` | `/products/delete` | Remove a product | 🔑 Admin Token |
-| `GET` | `/orders` | View all customer orders | 🔑 Admin Token |
-| `PATCH` | `/orders/update` | Update order status | 🔑 Admin Token |
-
-#### 📦 Create Product (POST `/products/add`)
-```json
-{
-  "name": "Premium Wireless Headphones",
-  "description": "High-quality noise-cancelling headphones with 30-hour battery life", 
-  "category": "Electronics",
-  "price": 299.99,
-  "stock": 50,
-  "brand": "AudioTech"
-}
-```
-
-#### ✏️ Update Product (PATCH `/products/update`)
-**Query Parameters:** `id=123`  
-**Request Body:** Include only the fields you want to update
-```json
-{
-  "price": 279.99,
-  "stock": 75
-}
-```
-
-#### 📋 Update Order Status (PATCH `/orders/update`)
-**Query Parameters:** `id=456`
-```json
-{
-  "status": "shipped"
-}
-```
-*Valid statuses: `pending`, `processing`, `shipped`, `delivered`, `cancelled`*
-
----
-
-### 🛒 Customer Experience - Shop with Confidence
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `GET` | `/products` | Browse products with smart filtering | ❌ No |
-| `POST` | `/orders/addOrder` | Place a new order | 🔑 Customer Token |
-| `GET` | `/orders/getByUser` | View your order history | 🔑 Customer Token |
-
-#### 🔍 Discover Products (GET `/products`)
-**Powerful Query Parameters (All Optional):**
-```
-page=1                    # Pagination (starts at 1)
-limit=10                  # Items per page (max 50)
-category=Electronics      # Filter by product category  
-minPrice=100             # Minimum price filter
-maxPrice=1000            # Maximum price filter
-rating=4                 # Minimum rating (1-5)
-brand=BrandName         # Filter by brand
-```
-
-**Example Request:**
-```
-GET /products?page=1&limit=5&category=Electronics&minPrice=100&maxPrice=500&brand=AudioTech
-```
-
-**What you'll get:**
-```json
-{
-  "success": true,
-  "data": {
-    "products": [...],
-    "pagination": {
-      "currentPage": 1,
-      "totalPages": 8,
-      "totalItems": 40,
-      "itemsPerPage": 5
-    }
-  }
-}
-```
-
-#### 🛍️ Place an Order (POST `/orders/addOrder`)
-**Headers:**
-```
-Authorization: Bearer <customer_token>
-```
-**Request Body:**
-```json
-{
-  "items": [
-    {
-      "productId": 1,
-      "quantity": 2
-    },
-    {
-      "productId": 3,
-      "quantity": 1
-    }
-  ]
-}
-```
-*The system automatically calculates total amounts and checks inventory.*
-
-#### 📊 View Order History (GET `/orders/getByUser`)
-**Headers:**
-```
-Authorization: Bearer <customer_token>
-```
-*Returns all orders for the authenticated customer with full details.*
-
----
-
-### 🔒 Authentication Headers - Keep It Secure
-
-For any endpoint marked with 🔑, include your JWT token in the Authorization header:
-
-```
-Authorization: Bearer <your_jwt_token>
-```
-
-### 📋 Consistent Response Format
-
-We believe in predictability. Every API response follows this clean, consistent structure:
-
-**✅ Success Response:**
-```json
-{
-  "success": true,
-  "message": "Operation completed successfully",
-  "data": { 
-    // Your actual response data goes here
-  }
-}
-```
-
-**❌ Error Response:**
-```json
-{
-  "success": false,
-  "message": "Clear description of what went wrong",
-  "error": { 
-    // Detailed error information for debugging
-  }
-}
-```
-
-*This consistency makes it easy to handle responses in your frontend applications.*
+| `POST` | `/orders/addOrder` | Place new order | Customer |
+| `GET` | `/orders/getByUser` | Get user orders | Customer |
+| `GET` | `/orders` | Get all orders | Admin |
+| `PATCH` | `/orders/update` | Update order status | Admin |
 
 ## 🏃‍♂️ Running Your Application - Multiple Ways to Win
 
@@ -641,21 +263,7 @@ docker-compose down # Clean shutdown of all services
 - **MySQL 8.0** - Relational database management system
 - **Sequelize 6.37.7** - Promise-based Node.js ORM
 
-### 📦 Production Dependencies
-```json
-{
-  "bcrypt": "^6.0.0",           // Secure password hashing & salt
-  "body-parser": "^2.2.0",     // HTTP request body parsing middleware
-  "dotenv": "^17.2.3",         // Environment variables management
-  "express": "^5.1.0",         // Web framework with modern features
-  "jsonwebtoken": "^9.0.2",    // JWT token generation & verification
-  "mysql2": "^3.15.3",         // MySQL database driver with promises
-  "nodemailer": "^7.0.10",     // Email sending with SMTP support
-  "nodemon": "^3.1.11",        // Development auto-restart utility
-  "sequelize": "^6.37.7",      // Object-Relational Mapping (ORM)
-  "sequelize-cli": "^6.6.3"    // Database migrations & seeding CLI
-}
-```
+
 
 ### 🐳 Infrastructure & DevOps
 - **Docker** - Application containerization
