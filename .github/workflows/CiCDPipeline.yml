@@ -45,8 +45,17 @@ jobs:
 
             echo "Creating docker-compose.yml..."
             cat > docker-compose.yml << 'EOF'
-            version: "3.9"
+            
+            networks:
+              Ecommerce_net:
+                driver: bridge
+              
+            volumes:
+              mysql_data_vol:
+              ecommerce_backend_data_vol:
+
             services:
+
               mysql_service:
                 image: mysql:8.0
                 container_name: mysql_Ecommerce
@@ -60,17 +69,9 @@ jobs:
                 networks:
                   - Ecommerce_net
                 restart: unless-stopped
-                command: >
-                  sh -c "
-                    npm install &&
-                    cd src &&
-                    npx sequelize-cli db:create --env development --config config/docker-config.json &&
-                    npx sequelize-cli db:migrate --env development --config config/docker-config.json &&
-                    npx sequelize-cli db:seed:all --env development --config config/docker-config.json &&
-                    cd .. &&
-                    npm start
-                  "
 
+                
+                
               ecommerce_backend_service:
                 image: sarojdockerworkspace/ecommerce_backend:latest
                 container_name: ecommerce_backend_service
@@ -83,16 +84,18 @@ jobs:
                 depends_on:
                   - mysql_service
                 restart: unless-stopped
-                
+                command: >
+                  sh -c "
+                    npm install &&
+                    cd src &&
+                    npx sequelize-cli db:create --env development --config config/docker-config.json &&
+                    npx sequelize-cli db:migrate --env development --config config/docker-config.json &&
+                    npx sequelize-cli db:seed:all --env development --config config/docker-config.json &&
+                    cd .. &&
+                    npm start
+                  "
+    
 
-            networks:
-              Ecommerce_net:
-                driver: bridge
-              
-
-            volumes:
-              mysql_data_vol:
-              ecommerce_backend_data_vol:
             EOF
 
             echo "Creating docker_compose.env..."
