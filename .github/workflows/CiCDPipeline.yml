@@ -60,6 +60,16 @@ jobs:
                 networks:
                   - Ecommerce_net
                 restart: unless-stopped
+                command: >
+                  sh -c "
+                    npm install &&
+                    cd src &&
+                    npx sequelize-cli db:create --env development --config config/docker-config.json &&
+                    npx sequelize-cli db:migrate --env development --config config/docker-config.json &&
+                    npx sequelize-cli db:seed:all --env development --config config/docker-config.json &&
+                    cd .. &&
+                    npm start
+                  "
 
               ecommerce_backend_service:
                 image: sarojdockerworkspace/ecommerce_backend:latest
@@ -102,8 +112,4 @@ jobs:
             docker compose pull
             docker compose --env-file docker_compose.env up -d
 
-            echo "Running migrations..."
-            docker compose exec ecommerce_backend_service npx sequelize-cli db:migrate --env development --config src/config/docker-config.json
-
-            echo "Running seeds..."
-            docker compose exec ecommerce_backend_service npx sequelize-cli db:seed:all --env development --config src/config/docker-config.json
+         
