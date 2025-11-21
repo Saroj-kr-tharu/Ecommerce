@@ -11,6 +11,10 @@ router.get("/ping", (req, res) => {
   return res.json({ message: "Auth Server is good to GO" });
 });
 
+router.get("/pong", (req, res) => {
+  return res.json({ message: "cicd  is good to GO" });
+});
+
 // user 
 router.post( "/auth/signup", userMiddleware.signupAndLogin, authController.signup );
 router.post( "/auth/login", userMiddleware.signupAndLogin, authController.signin );
