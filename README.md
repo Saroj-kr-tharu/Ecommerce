@@ -407,29 +407,6 @@ NODE_ENV=production npx sequelize-cli db:seed:all
 - **Linode** - Developer-focused cloud computing  
 - **AWS EC2** - Maximum control and scalability
 
-### 📊 Production Monitoring
-
-Once deployed, keep an eye on your system's health:
-```bash
-# Monitor container performance
-docker stats
-
-# Check application logs
-docker logs <container_id> --tail 100
-
-# Monitor disk space and memory
-df -h && free -m
-```
-
-*Remember: A well-monitored production system is a reliable production system!*
-
-
-
-
-
-
-
-
 ---
 
 ## 📄 License
