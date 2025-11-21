@@ -7,13 +7,11 @@ const {adminMiddleware,custumerMiddleware,userMiddleware} = require('../../middl
 
 
 
-router.get("/pong", (req, res) => {
+router.get("/check", (req, res) => {
   return res.json({ message: "Auth Server is good to GO" });
 });
 
-router.get("/pong", (req, res) => {
-  return res.json({ message: "cicd  is good to GO" });
-});
+
 
 // user 
 router.post( "/auth/signup", userMiddleware.signupAndLogin, authController.signup );
