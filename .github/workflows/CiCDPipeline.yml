@@ -73,10 +73,12 @@ jobs:
                 depends_on:
                   - mysql_service
                 restart: unless-stopped
+                
 
             networks:
               Ecommerce_net:
                 driver: bridge
+              
 
             volumes:
               mysql_data_vol:
@@ -95,6 +97,13 @@ jobs:
             EMAIL_PASS=${{ secrets.EMAIL_PASS }}
             EOF
 
+
             echo "Pulling and running containers..."
             docker compose pull
             docker compose --env-file docker_compose.env up -d
+
+            echo "Running migrations..."
+            docker compose exec ecommerce_backend_service npx sequelize-cli db:migrate --env development --config src/config/docker-config.json
+
+            echo "Running seeds..."
+            docker compose exec ecommerce_backend_service npx sequelize-cli db:seed:all --env development --config src/config/docker-config.json
