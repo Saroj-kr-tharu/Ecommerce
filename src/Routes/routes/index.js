@@ -7,7 +7,7 @@ const {adminMiddleware,custumerMiddleware,userMiddleware} = require('../../middl
 
 
 
-router.get("/ping", (req, res) => {
+router.get("/pong", (req, res) => {
   return res.json({ message: "Auth Server is good to GO" });
 });
 
