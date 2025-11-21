@@ -393,21 +393,7 @@ NODE_ENV=production npx sequelize-cli db:migrate
 NODE_ENV=production npx sequelize-cli db:seed:all
 ```
 
-### ☁️ Cloud Deployment Options
 
-**Popular Cloud Platforms:**
-- **AWS ECS/Fargate** - Managed container service
-- **Google Cloud Run** - Serverless containers  
-- **DigitalOcean App Platform** - Simple container deployment
-- **Azure Container Instances** - Quick container hosting
-- **Railway/Render** - Developer-friendly platforms
-
-**VPS Deployment (Traditional):**
-- **DigitalOcean Droplets** - Reliable and affordable
-- **Linode** - Developer-focused cloud computing  
-- **AWS EC2** - Maximum control and scalability
-
----
 
 ## 📄 License
 
