@@ -1,4 +1,3 @@
-
 name: Deploy to Server
 
 on:
@@ -40,15 +39,6 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_SSH_KEY }}
-
-          script: |
-                  - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.VPS_SSH_KEY }}
-
           script: |
             mkdir -p ~/Ecommerce/Backend
             cd ~/Ecommerce/Backend
@@ -97,18 +87,14 @@ jobs:
             cat > docker_compose.env << 'EOF'
             MYSQL_ROOT_PASSWORD=12345
             MYSQL_DATABASE=ecommerce
-            MYSQL_DATABASE=ecommerce
             NODE_ENV=production
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-            PORT = 8000
-            PRIVATEJWT = ${{PRIVATEJWT}}
-
-            EMAIL_ID = ${{EMAIL_ID}}
-            EMAIL_PASS= ${{EMAIL_PASS}}
-
+            PORT=8000
+            PRIVATEJWT=${{ secrets.PRIVATEJWT }}
+            EMAIL_ID=${{ secrets.EMAIL_ID }}
+            EMAIL_PASS=${{ secrets.EMAIL_PASS }}
             EOF
 
             echo "Pulling and running containers..."
             docker compose pull
             docker compose --env-file docker_compose.env up -d
-
