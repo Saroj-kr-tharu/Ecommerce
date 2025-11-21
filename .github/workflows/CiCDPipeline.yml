@@ -14,25 +14,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4  
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      # - name: Login to Docker Hub
-      #   uses: docker/login-action@v3
-      #   with:
-      #     username: ${{ vars.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      # - name: Build and push Docker image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: .
-      #     push: true 
-      #     tags: ${{ vars.DOCKERHUB_USERNAME }}/ecommerce_backend:latest
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true 
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/ecommerce_backend:latest
 
-      # - name: Logout from Docker Hub
-      #   if: always()
-      #   run: docker logout
+      - name: Logout from Docker Hub
+        if: always()
+        run: docker logout
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -40,13 +40,75 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           password: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd ~/Ecommerce/Backend
-            git clone https://github.com/Saroj-kr-tharu/Ecommerce.git
-            cd Ecommerce
-            docker compose up 
 
-          # script: |
-          #   cd ~/Ecommerce/Backend
-          #   docker pull ${{ vars.DOCKERHUB_USERNAME }}/ecommerce_backend:latest
-          #   docker run -d -p 8000:8000 --name ecommerce_backend ${{ vars.DOCKERHUB_USERNAME }}/ecommerce_backend:latest
+          script: |
+                  - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_SSH_KEY }}
+
+          script: |
+            mkdir -p ~/Ecommerce/Backend
+            cd ~/Ecommerce/Backend
+
+            echo "Creating docker-compose.yml..."
+            cat > docker-compose.yml << 'EOF'
+            version: "3.9"
+            services:
+              mysql_service:
+                image: mysql:8.0
+                container_name: mysql_Ecommerce
+                ports:
+                  - "3308:3306"
+                environment:
+                  - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+                  - MYSQL_DATABASE=${MYSQL_DATABASE}
+                volumes:
+                  - mysql_data_vol:/var/lib/mysql
+                networks:
+                  - Ecommerce_net
+                restart: unless-stopped
+
+              ecommerce_backend_service:
+                image: sarojdockerworkspace/ecommerce_backend:latest
+                container_name: ecommerce_backend_service
+                env_file:
+                  - docker_compose.env
+                ports:
+                  - "8000:8000"
+                networks:
+                  - Ecommerce_net
+                depends_on:
+                  - mysql_service
+                restart: unless-stopped
+
+            networks:
+              Ecommerce_net:
+                driver: bridge
+
+            volumes:
+              mysql_data_vol:
+              ecommerce_backend_data_vol:
+            EOF
+
+            echo "Creating docker_compose.env..."
+            cat > docker_compose.env << 'EOF'
+            MYSQL_ROOT_PASSWORD=12345
+            MYSQL_DATABASE=ecommerce
+            MYSQL_DATABASE=ecommerce
+            NODE_ENV=production
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            PORT = 8000
+            PRIVATEJWT = ${{PRIVATEJWT}}
+
+            EMAIL_ID = ${{EMAIL_ID}}
+            EMAIL_PASS= ${{EMAIL_PASS}}
+
+            EOF
+
+            echo "Pulling and running containers..."
+            docker compose pull
+            docker compose --env-file docker_compose.env up -d
+
