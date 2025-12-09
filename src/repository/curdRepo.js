@@ -26,6 +26,8 @@ class CURD_REPO{
     async updateById (data, id) { 
         try {
             const res = await this.model.update(data, { where : {id } } );
+
+            // console.log('res => ', res, data , id )
             return res ;
 
         } catch (error) {

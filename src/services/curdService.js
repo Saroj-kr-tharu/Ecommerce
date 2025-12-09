@@ -56,7 +56,7 @@ class CurdService {
 
     async getByIdService(data){
         try {
-            const res = await this.repo.getById(data);
+            const res = await this.repo.getbyId(data);
             return res; 
 
         } catch (error) {
@@ -72,6 +72,7 @@ class CurdService {
     async getAll(){
         try {
             const res = await this.repo.getAll();
+            console.log('from repo => ',res)
             return res; 
 
         } catch (error) {

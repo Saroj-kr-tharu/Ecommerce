@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require("cors");
 
+const cookieParser = require('cookie-parser')
+
 
 const {PORT}= require('./config/serverConfig')
 const appRoutes = require('./Routes/index')
@@ -10,6 +12,7 @@ const serverSetupAndStart = async () => {
     const app = express()
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}))
+    app.use(cookieParser());
 
     // app.use(
     // cors({
@@ -28,7 +31,13 @@ const serverSetupAndStart = async () => {
     // );
 
 
-    app.use(cors({ origin: '*', credentials: true ,methods: 'GET,POST,PUT,DELETE,PATCH' }));
+   app.use(cors({
+  origin: 'http://localhost:4200',  // <-- Angular frontend URL
+  credentials: true,
+  methods: ['GET','POST','PUT','DELETE','PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token']
+}));
+
 
     
     

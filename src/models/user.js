@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
         as: 'otps'
       });
 
+      User.hasOne(models.Cart, {
+    foreignKey: "userId",
+    as: "cart",
+    onDelete: "CASCADE"
+  });
+
     }
   }
   User.init({
@@ -46,13 +52,21 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,  
       },
 
+      refreshToken: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+
       role: {
           allowNull: false,
-
           type: DataTypes.ENUM("CUSTOMER", "ADMIN"),
           defaultValue:"CUSTOMER"
-      
       },
+      isActive: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
+    },
 
   }, {
     sequelize,

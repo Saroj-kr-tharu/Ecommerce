@@ -28,11 +28,22 @@ module.exports = {
           len: [5, 500],
         },
       },
+      refreshToken: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+    },
+
       role: {
         allowNull: false,
         type: Sequelize.ENUM("CUSTOMER", "ADMIN"),
         defaultValue: "CUSTOMER"
       },
+
+      isActive: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

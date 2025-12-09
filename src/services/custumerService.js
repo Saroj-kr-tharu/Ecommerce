@@ -1,22 +1,55 @@
 const CurdService = require('./curdService')
 const  {Product_Repo, Orders_Repo} = require('../repository/index')
-const { Order, OrderItem, Product, sequelize } = require("../models");
-const {  ServiceError, AppError, HttpsStatusCodes} = require('../utlis/index')
+const { Order, OrderItem,CartItem, Product,Cart,  sequelize } = require("../models");
+const {  ServiceError, AppError, HttpsStatusCodes} = require('../utlis/index');
+const cart = require('../models/cart');
 
 class custumerService extends CurdService {
     constructor(){
         super(Product_Repo)
     }
 
-    async getProduct(page, limit, data){
+    async getProduct(page=1, limit=5, data){
         try {
-
-            const offset = (page - 1) * limit;
+            
+            const offset = (page - 1) * parseInt(limit);
             const res = await Product_Repo.getProPagation(offset,limit, data);
             return res; 
 
         } catch (error) {
-            console.log("something went wrong in service curd level  (getById) ")
+            console.log("something went wrong in service curd level  (getProduct) ")
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
+
+    async getAllProduct(){
+        try {
+            
+            const res = await Product_Repo.getAll();
+            return res; 
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getProduct) ")
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
+
+    async getProductByid(id){
+        try {
+            console.log('id => ', id)
+            const res = await Product_Repo.getProductByIdRepo(id);
+            return res; 
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getProductByid) ")
             if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;
             }
@@ -55,7 +88,6 @@ class custumerService extends CurdService {
                         `Product  name ${product.name} fortend put 0 quantity`,
                         'Issue in qunatity in custumerService in  addOrders function ',
                         HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
-
                     );
 
 
@@ -133,10 +165,41 @@ class custumerService extends CurdService {
                     // Reduce product stock
                     product.stock -= item.quantity;
                     await product.save({ transaction: t });
+
+
+                    // 5.1 Remove from cart
+                    // 1. Get cartId for the user
+                    const userCart = await Cart.findOne({
+                        where: { userId: userId },
+                        transaction: t
+                    });
+                    // console.log('usercart => ', userCart.id === cartId  )
+                    // 2. Remove the product from cartitems
+                    if (userCart) {
+                        // console.log('product =>  ',product.id)
+                        // console.log('product =>  ',userCart.dataValues.id)
+                      const user =   await CartItem.update(
+                            { selected: true }, 
+                            {
+                                where: {
+                                    cartId: userCart.dataValues.id,
+                                    productId: product.id
+                                },
+                                transaction: t
+                            }
+                        );
+                        // console.log('user => ', user )
+                    }
+
+                    
                 }
+                
+                
 
                 // 5️ Commit transaction
                 await t.commit();
+
+
 
             // 6️ Return 
              const res =  {

@@ -34,7 +34,7 @@ class AuthController {
             
             
             const data = req?.body;
-            const response = await userService.loginService(data);
+            const response = await userService.loginService(data, res);
             
             return res.status(SucessCode.CREATED).json({
                 message: "Successfully to login",
@@ -53,6 +53,7 @@ class AuthController {
             });
         }
     }
+    
 
     async loginByOTP(req,res) {
         try {
@@ -85,7 +86,7 @@ class AuthController {
             
             const {email, otp} = req?.query;
             
-            const response = await otpService.verifyOTP(email, otp);
+            const response = await otpService.verifyOTP(email, otp, res);
             
             return res.status(SucessCode.CREATED).json({
                 message: "Sucessfully login   ",
@@ -111,9 +112,11 @@ class AuthController {
             
             const token = req?.headers['x-access-token'];
             const response = await userService.verifyToken(token);
+
+            console.log('response = > ', response)
             
             return res.status(SucessCode.OK).json({
-                message: "Successfully to login",
+                message: "Successfully to veify Token ",
                 success: true,
                 data: response,
                 err: {},
@@ -129,6 +132,70 @@ class AuthController {
             });
         }
     }
+
+
+    async refreshToken(req,res) {
+        try {
+            
+            
+            const oldToken = req.cookies.refreshToken;
+            const response = await userService.genRefreshToken(oldToken, res);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully generate new Refresh Token",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (refreshToken) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+
+      async logout(req,res) {
+        try {
+            
+            
+            const oldToken = req.cookies.refreshToken;
+
+            if(!oldToken){
+                    return res.status(SucessCode.OK).json({
+                    message: "Already Logout",
+                    success: true,
+                    data: {},
+                    err: {},
+                });
+            }
+
+            const response = await userService.logout(oldToken, res);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully logout",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (logout) ")
+            res.clearCookie("refreshToken");
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
 
 }
 

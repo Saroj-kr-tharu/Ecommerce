@@ -10,11 +10,28 @@ class adminService extends CurdService {
 
     async deleteByIdService(data){
         try {
+            // console.log('id => ', data)
             const res = Product_Repo.deleteById(data);
             return res; 
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
+
+     async deleteBulkService(data){
+        try {
+            // console.log('id => ', data)
+            const res = Product_Repo.deleteBulk(data);
+            return res; 
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (deleteBulkService) ")
             if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;
             }
@@ -31,6 +48,22 @@ class adminService extends CurdService {
 
         } catch (error) {
             console.log("something went wrong in service curd level  (create) ")
+           if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
+
+    async getAllOrdersWithoutFilter( ){
+        try {
+           
+            const res = ordersService.getAllOrderWithoutFilterORderService();
+            return res; 
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getAllOrdersWithoutFilter) ")
            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;
             }

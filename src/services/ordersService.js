@@ -23,6 +23,23 @@ class OrdersService extends CurdService {
             throw new ServiceError()
         }
     }
+
+
+    async getAllOrderWithoutFilterORderService(){
+        try {
+
+        const res = await Orders_Repo.getAllOrdersWithoutFilter();
+        return res;
+
+        } catch (error) {
+            console.log("something went wrong in service curd level  (getById) ")
+            if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
+                throw error;
+            }
+
+            throw new ServiceError()
+        }
+    }
     
 
 

@@ -95,6 +95,43 @@ class OrderRepo extends CURD_REPO {
 
 
 
+     async getAllOrdersWithoutFilter () { 
+        try {
+              const orders = await Order.findAll({
+                include: [
+                    {
+                    model: User,
+                    as: 'user', 
+                    attributes: ['id', 'username', 'email']
+                    },
+                    {
+                    model: OrderItem,
+                    include: [
+                        {
+                        model: Product,
+                        attributes: ['id', 'name', 'price', 'stock']
+                        }
+                    ]
+                    }
+                ], 
+
+              });
+                // console.log('oredes => ', orders)
+                return orders;
+
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (getAllOrdersWithoutFilter) ")
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched all orders ',
+                'Issue in fetching all orders in OrderRepo REPO',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
+
+
 
 
     

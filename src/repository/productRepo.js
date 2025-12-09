@@ -13,14 +13,68 @@ class UserREpo extends CURD_REPO {
 
     async deleteById (id) { 
         try {
-              const res = await this.model.destroy({
-                    where: {
-                    id
-                    },
-                });
+
+            console.log('id => ', id)
+            //   const res = await this.model.destroy({
+            //         where: {
+            //         id
+            //         },
+            //     });
+
+            const res = await this.model.update(
+                    { isActive: this.model.sequelize.literal('NOT isActive') },
+                    { where: { id } }
+                );
             return res;
         } catch (error) {
             console.log("something went wrong in Repo curd level (delete) ")
+            throw new AppError(
+                'RepositoryError',
+                'Cannot delete BY ID ',
+                'Issue in deleting By ID in productRepo REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
+
+
+      async deleteBulk (ids) { 
+        try {
+
+            // console.log('id => ', ids)
+            //   const res = await this.model.destroy({
+            //          id: {
+            //         [Op.in]: ids,
+            //         },
+            //     });
+
+              const res = await this.model.update(
+              { isActive: this.model.sequelize.literal('NOT isActive') },
+            { where: { id: { [Op.in]: ids } } }
+        );
+                // console.log(' res => ', res)
+            return res;
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (deleteBulk) ")
+            throw new AppError(
+                'RepositoryError',
+                'Cannot delete BY ID ',
+                'Issue in deleteBulk By ID in productRepo REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
+
+    async getProductByIdRepo (id) { 
+        try {
+            const res = await this.model.findOne({
+                where: { id }
+            });
+            return res;
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (getProductById) ")
             throw new AppError(
                 'RepositoryError',
                 'Cannot delete BY ID ',
@@ -37,6 +91,18 @@ class UserREpo extends CURD_REPO {
 
         if(data.category){
             filter.category = data.category
+        }
+
+        if (data.title && data.title.trim()) {
+            const term = data.title.trim();
+
+            filter[Op.or] = [
+                { name: { [Op.like]: `%${term}%` } },
+                
+                { description: { [Op.like]: `%${term}%` } },
+                { brand: { [Op.like]: `%${term}%` } },
+                { category: { [Op.like]: `%${term}%` } },
+            ];
         }
 
         if(data.brand){
@@ -71,14 +137,26 @@ class UserREpo extends CURD_REPO {
     
     async getProPagation (offset, limit, data) { 
         
-        try {
+        try {   
+            // console.log('offset ', offset, ' limit ', limit, ' data ', data)
               const filter =  this.#createFilter(data)
             //   console.log('filter generated => ', filter);
 
-              const res = await this.model.findAndCountAll({ where: filter,  offset, limit });
+                 let order = [];
+                if (data && typeof data.sort === 'string') {
+                    if (data.sort.toLowerCase() === 'price_asc') {
+                    order = [['price', 'ASC']];
+                    } else if (data.sort.toLowerCase() === 'price_desc') {
+                    order = [['price', 'DESC']];
+                    }
+                }
+
+                console.log(' order => ', order)
+                
+              const res = await this.model.findAndCountAll({ where: filter,  offset, limit , order });
               return res;
         } catch (error) {
-            console.log("something went wrong in Repo curd level (delete) ")
+            console.log("something went wrong in Repo curd level (getProPagation) ")
             throw new AppError(
                 'RepositoryError',
                 'Cannot fetched product by filter ',

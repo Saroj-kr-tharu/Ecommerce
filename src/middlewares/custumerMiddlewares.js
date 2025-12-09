@@ -5,7 +5,11 @@ const userservice = require('../services/userService');
 
  class CustumerMiddlwares {
     async  verifyToken  (req, res, next)  {
+
+      
         const token = req?.headers['x-access-token'];
+
+        // console.log('token => ', token)  
         if (!token ) {
             
             return res.status(ClientErrorsCodes.BAD_REQUEST).json({
@@ -25,7 +29,7 @@ const userservice = require('../services/userService');
             } catch (error) {
             return res.status(ClientErrorsCodes.UNAUTHORISED).json({
                 data: {},
-                message: "Invalid token or Token expired",
+                message: "Invalid acess token or Token expired",
                 success: false,
             });
             }

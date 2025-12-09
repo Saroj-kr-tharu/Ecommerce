@@ -6,6 +6,8 @@ const {AppError, HttpsStatusCodes} = require('../utlis/index')
 class Bcrypt_helper_class {
   async checkPasswordService(plainpasword, hash) {
     try {
+
+      console.log('data => ', plainpasword, hash)
       const match = bcrypt.compareSync(plainpasword, hash);
       if (!match) 
           throw new AppError(

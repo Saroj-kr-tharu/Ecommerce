@@ -88,12 +88,12 @@ class OTPService extends CurdService {
             if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;
             }
-
+ 
             throw error
         }
     }
 
-    async verifyOTP(email, otp){
+    async verifyOTP(email, otp, res){
         try {
            
             // 1. get user info email is exist or not 
@@ -123,31 +123,18 @@ class OTPService extends CurdService {
             console.log(expiresAt)
                 
             if(!otpinfo)
-                throw new AppError(
-                        'OTP Login Errors',
-                        `OTP not Exist or already used`,
-                        'Issue in login  in OTPService in  verifyOTP function ',
-                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
-                    );
+                return 'Invalid otp '
 
 
-            if(new Date() > expiresAt)
-                throw new AppError(
-                    'OTP Login Errors',
-                    `OTP with ${email} is expire `,
-                    'Issue in login  in OTPService in  verifyOTP function ',
-                    HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
-                );
+            if(new Date() > expiresAt){
+                return 'opt Expire'
+
+            }
 
             const isValid = await bcryptHelper.checkPasswordService(otp, otpinfo?.dataValues?.code);
 
             if(!isValid)
-                 throw new AppError(
-                    'OTP Login Errors',
-                    `OTP with ${email} is not matched`,
-                    'Issue in login  in OTPService in  verifyOTP function ',
-                    HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
-                );
+                 { return 'otp invalid'}
         
 
             const data = {
@@ -160,6 +147,21 @@ class OTPService extends CurdService {
 
             await OTP_Repo.delete(userId)
             const token = await jwt_helper.createToken(data);
+
+
+            const refreshToken = await jwt_helper.createRefreshToken({email: data.email, id: data.id,});
+
+
+            // update refresh token in db 
+            await USER_REPO.updateById({refreshToken: refreshToken},data.id );
+            
+
+            res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,
+                    secure: true,
+                    sameSite: "strict",
+                    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                });
 
             
             return {

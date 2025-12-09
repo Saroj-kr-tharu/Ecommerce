@@ -39,12 +39,41 @@ class UserMiddleware {
             
             return res.status(ClientErrorsCodes.UNAUTHORISED).json({
             data: {},
-            message: "Email or Password is missing  ",
+            message: "token is missing  ",
             success: false,
             });
         }
 
       next();
+    };
+    verifyRefreshToken  (req, res, next)  {
+
+      try {
+        
+        console.log('d=> ', req.cookies)
+        
+       const oldToken = req.cookies['refreshToken'];
+       
+        if (!oldToken ) {
+            console.log("No refresh token is missing ");
+            
+            return res.status(ClientErrorsCodes.UNAUTHORISED).json({
+            data: {},
+            message: "refresh token is missing  ",
+            success: false,
+            });
+        }
+
+      next();
+      } catch (error) {
+           return res.status(ClientErrorsCodes.NOT_FOUND).json({
+            message: "refresh token is missing ",
+            success: false,
+          });
+          // throw new Error('old token is not found')
+      }
+
+        
     };
 
 }

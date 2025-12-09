@@ -49,9 +49,9 @@ module.exports = {
         defaultValue: 0
       },
       paymentMethod: {
-        type: Sequelize.ENUM("CASH", "CARD"),
+        type: Sequelize.ENUM("COD", "ESEWA", "KHALTI", "STRIPE"),
         allowNull: false,
-        defaultValue: "CASH"
+        defaultValue: "COD"
       },
       paymentStatus: {
         type: Sequelize.ENUM('pending', 'paid', 'failed', 'refunded'),

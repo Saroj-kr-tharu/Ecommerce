@@ -80,6 +80,33 @@ class AdminController {
         }
     }
 
+     async bulkdeleteProduct(req,res) {
+        try {
+            
+            console.log(req?.body)
+            const {data} = req?.body;
+            console.log('data => ', data)
+            
+            const response = await adminService.deleteByIdService(data);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully delete bulkdeleteProduct",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (bulkdeleteProduct) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR ).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
 
     async getAllOrders(req,res) {
         try {
@@ -95,6 +122,29 @@ class AdminController {
 
         } catch (error) {
             console.log("something went wrong in controller  level  (getallOrders) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+     async getAllOrdersWithoutFilter(req,res) {
+        try {
+           
+            const response = await adminService.getAllOrdersWithoutFilter();
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all orders",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  (getAllOrdersWithoutFilter) ", error)
             return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,
                 sucess: false,
@@ -132,6 +182,87 @@ class AdminController {
         }
     }
 
+      async getAllUserWithoutFilter(req,res) {
+        try {
+            
+           
+            
+            const response = await userService.getAllUserWithoutFilterPagtion();
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all users",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  ( getAllUsers) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+
+    async updateUserById(req,res) {
+        try {
+            
+            const {id} = req?.query;
+            
+            const data =req.body;
+            
+            const response = await userService.userUpdateById(data, id);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all users",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  ( updateUserById) ")
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
+
+    async BulkupdateUsers(req,res) {
+        try {
+            
+            
+            
+            const {ids} =req.body;
+
+            console.log('ids => ', ids)
+            
+            const response = await userService.bulkUpdateUserId(ids);
+            
+            return res.status(SucessCode.OK).json({
+                message: "Successfully fetched all users",
+                success: true,
+                data: response,
+                err: {},
+            });
+
+        } catch (error) {
+            console.log("something went wrong in controller  level  ( updateUserById) ", error)
+            return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
+                message: error.message,
+                sucess: false,
+                data: {},
+                err: error.explanation,
+            });
+        }
+    }
 
      async getAllUsers(req,res) {
         try {
