@@ -18,15 +18,18 @@ class userService extends CurdService {
             const {password, email} = data;
             const infoUser = await USER_REPO.getByEmail(email);
 
-            if (infoUser?.dataValues?.isActive)  throw new Error("You are Ban User");
+            
+
+           
 
             const hashpassword = infoUser?.dataValues?.password
 
             if(!hashpassword) throw new Error("Invalid Credentials")
-
-            const isValid = await bcryptHelper.checkPasswordService(password, hashpassword );
-
-            if (!isValid)  throw new Error("Invalid Credentials");
+                
+                const isValid = await bcryptHelper.checkPasswordService(password, hashpassword );
+                
+                if (!isValid)  throw new Error("Invalid Credentials");
+                if (infoUser?.dataValues?.isActive)  throw new Error("You are Ban User");
 
 
             // access token
@@ -65,8 +68,8 @@ class userService extends CurdService {
             if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;
             }
-
-            throw new ServiceError()
+             throw error;
+            // throw new ServiceError()
         }
     }
 

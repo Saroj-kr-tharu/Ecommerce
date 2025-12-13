@@ -131,7 +131,8 @@ module.exports = (sequelize, DataTypes) => {
 
     deliveredAt: {
       type:DataTypes.DATE,
-      allowNull: false, 
+      allowNull: true,
+      defaultValue:false 
 
    },
 

@@ -13,7 +13,7 @@ class Bcrypt_helper_class {
           throw new AppError(
                         'bcrypt Error',
                         `Creditals invlaid`,
-                        'Issue in verify Creaditials  in bcryptHelper in  Bcrypt_helper_class function ',
+                        ' Creditals invlaid Issue in verify Creaditials  in bcryptHelper in  Bcrypt_helper_class function ',
                         HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
 
                     );

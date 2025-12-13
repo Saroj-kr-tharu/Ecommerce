@@ -1,4 +1,5 @@
-const {userService, otpService} = require('../services/index')
+const {userService, otpService} = require('../services/index');
+const sendMessageToQueueService = require('../services/queueService');
 const {SucessCode, ServerErrosCodes} = require('../utlis/Errors/https_codes')
 
 class AuthController { 
@@ -9,6 +10,17 @@ class AuthController {
     
             const data = req?.body;
             const response = await userService.createService(data);
+
+            const payload = {
+                subject: "Welcome To MarketMandu",
+                content: "Reset",
+                recepientEmail: data.email,
+                notificationTime: new Date(),
+                typeMail: "WELCOME",
+                username: data.Username || data.email ,
+                token: "",  
+            };
+            await sendMessageToQueueService(payload, 'CREATE_TICKET');
             
             return res.status(SucessCode.OK).json({
                 message: "Successfully to Signup",
@@ -18,7 +30,7 @@ class AuthController {
             });
 
         } catch (error) {
-            console.log("something went wrong in controller  level  (signup) ")
+            console.log("something went wrong in controller  level  (signup) ", error )
 
             return res.status(error.statusCode  | ServerErrosCodes.INTERNAL_SERVER_ERROR).json({
                 message: error.message,

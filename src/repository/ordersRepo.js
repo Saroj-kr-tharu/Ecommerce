@@ -53,6 +53,49 @@ class OrderRepo extends CURD_REPO {
         }
     }
 
+     async getOrdersByOrderNo (orderNo ) { 
+        try {
+                // console.log('order => ', orderNo)
+              const orders = await Order.findAll({
+                where: {
+                    orderNumber:orderNo,
+                },
+                include: [
+                    {
+                    model: User,
+                    as: 'user', 
+                    attributes: ['id', 'username', 'email']
+                    },
+                    {
+                    model: OrderItem,
+                    include: [
+                        {
+                        model: Product,
+                        attributes: ['id', 'name', 'price', 'stock']
+                        }
+                    ]
+                    }
+                ], 
+
+              
+                raw: false,
+                nest: true
+
+                });
+
+                return orders;
+
+        } catch (error) {
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched ALL Order BY User Id  ',
+                'Issue in updating By ID in OrderRepo',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
+
     async getAllOrders (offset, limit) { 
         try {
               const orders = await Order.findAll({
@@ -132,6 +175,25 @@ class OrderRepo extends CURD_REPO {
     }
 
 
+ 
+    
+    async updateOrdersByOrderNo (data, orderNumber) { 
+        try {
+               const res = await this.model.update(data, { where : {orderNumber } } );
+
+                return res;
+
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (updateOrdersByTransId) ")
+            throw new AppError(
+                'RepositoryError',
+                'Cannot fetched all orders ',
+                'Issue in updateOrdersByTransId all orders in OrderRepo REPO',
+                HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
 
 
     

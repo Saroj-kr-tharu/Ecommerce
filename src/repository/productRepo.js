@@ -11,6 +11,37 @@ class UserREpo extends CURD_REPO {
         super(Product)
     }
 
+    async deincreaceQunatity (id, qty) { 
+        try {
+            console.log('id => ', id , ' and qty => ', qty)
+            const product = await this.model.findByPk(id  );
+            if (!product) {
+                throw new Error('Products is not Found');
+            }
+            if (product.stock < qty) {
+                throw new Error('Products Qunatity is less then required ');
+            }
+            
+            const [affectedRows] = await this.model.increment(
+                { stock: -qty },
+                { where: { id } }
+            );
+            
+            return affectedRows;
+
+        } catch (error) {
+            console.log("something went wrong in Repo curd level (deincreaceQunatity) ")
+            throw new AppError(
+                'RepositoryError',
+                'Stock update error',
+                'Issue Stock update error in deincreaceQunatity REPO',
+                HttpsStatusCodes.INTERNAL_SERVER_ERROR
+
+            );
+        }
+    }
+    
+
     async deleteById (id) { 
         try {
 

@@ -3,6 +3,9 @@ const  {Product_Repo, Orders_Repo} = require('../repository/index')
 const { Order, OrderItem,CartItem, Product,Cart,  sequelize } = require("../models");
 const {  ServiceError, AppError, HttpsStatusCodes} = require('../utlis/index');
 const cart = require('../models/cart');
+const axios = require('axios');
+const { PAYMENT_BACKEND_URL } = require('../config/serverConfig');
+const { v4: uuidv4 } = require('uuid');
 
 class custumerService extends CurdService {
     constructor(){
@@ -59,13 +62,14 @@ class custumerService extends CurdService {
     }
 
     async addOrders( data){
-        try {
+        try { 
 
             // start transaction 
             const t = await sequelize.transaction();
 
             let subtotal  = 0 ; 
             const products = [];
+            let orderItemsDetail= [];
 
             // loop 
             for (let item of data.orderItems) {
@@ -100,6 +104,13 @@ class custumerService extends CurdService {
                         HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
 
                     );
+
+                orderItemsDetail.push({
+                    'productId': item.productId,
+                    'Name': product.name,
+                    'qty': item.quantity,
+                    'total': product.price * item.quantity
+                });
 
                 // add to product
                 products.push(product);
@@ -145,9 +156,9 @@ class custumerService extends CurdService {
                 );
 
                 // 4️ Create order items & update stock
-                for (let i = 0; i < data.orderItems.length; i++) {
+                for (let i = 0; i < data.orderItems.length; i++) { 
                     const item = data.orderItems[i];
-                    const product = products[i];
+                    const product = products[i]; 
                     
                     // Create order item
                     await OrderItem.create(
@@ -199,7 +210,28 @@ class custumerService extends CurdService {
                 // 5️ Commit transaction
                 await t.commit();
 
+                // goto payment db 
+                 const trans_id = uuidv4(); 
+                 let  reqBody = {
+                        transactionId: trans_id,
+                        userEmail: data.userEmail,
+                        amount: totalAmount,
+                        items: orderItemsDetail,
+                        orderId: order.orderNumber,
+                        tax, 
+                        shippingFee,
+                        deliveredAt,
+                        Subtotal: subtotal
+                    }
 
+                 
+                let link = `${PAYMENT_BACKEND_URL}/cod-initiate`;
+                 const axiosResult = await axios.post(link, reqBody, {
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                 
 
             // 6️ Return 
              const res =  {
@@ -208,7 +240,10 @@ class custumerService extends CurdService {
                 totalAmount,
             }
 
-            return res;
+            console.log('axiosn => ', axiosResult.data)
+             return axiosResult.data;
+
+            // return res;
 
              
 

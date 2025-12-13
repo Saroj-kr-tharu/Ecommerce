@@ -5,7 +5,7 @@ const {AppError, HttpsStatusCodes} = require('./index')
 
 class JWT {
 
-  async createToken(data, time= '1m') {
+  async createToken(data, time= '10m') {
     try {
 
       

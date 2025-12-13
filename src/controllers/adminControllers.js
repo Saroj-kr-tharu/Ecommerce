@@ -160,7 +160,7 @@ class AdminController {
             const {orderId} = req?.query;
             const data = req?.body; 
 
-            console.log(data)
+            console.log(` orderId => ${orderId} and data => ${data} `)
 
             const response = await orderService.updateService(data, orderId);
             

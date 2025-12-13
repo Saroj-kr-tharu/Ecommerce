@@ -16,7 +16,6 @@ router.get("/check", (req, res) => {
 // user 
 router.post( "/auth/signup", userMiddleware.signupAndLogin, authController.signup );
 router.post( "/auth/login", userMiddleware.signupAndLogin, authController.signin );
-// router.post( "/auth/logout", userMiddleware, authController.signin );
 router.get( "/auth/veriyToken", userMiddleware.verifyToken, authController.veriyToken );
 router.post( "/auth/refresh-token", userMiddleware.verifyRefreshToken, authController.refreshToken );
 router.post( "/auth/login/otp", authController.loginByOTP );
@@ -37,6 +36,7 @@ router.get( "/ordersAll",  adminMiddleware.verifyToken, adminController.getAllOr
 router.get( "/getOrderAllWithoutFilter",  adminMiddleware.verifyToken, adminController.getAllOrdersWithoutFilter );
 router.patch( "/orders/update",  adminMiddleware.verifyToken, adminController.editOrders );
 
+
 //admin/users
 router.get( "/users",  adminMiddleware.verifyToken, adminController.getAllUsers );
 router.get( "/userswithoutfilter",  adminMiddleware.verifyToken, adminController.getAllUserWithoutFilter );
@@ -46,11 +46,14 @@ router.patch( "/users/bulkupdate",  adminMiddleware.verifyToken, adminController
 // custumer 
 // custumer/product
 router.get( "/products",  CustumerControllers.getProduct );
-router.get( "/product",  CustumerControllers.getProductById );
+router.get( "/product",  CustumerControllers.getProductById ); 
 
 // custumer/orders
 router.post( "/orders/addOrder",  custumerMiddleware.verifyToken, CustumerControllers.addOrders );
 router.get( "/orders/getByUser",  custumerMiddleware.verifyToken, CustumerControllers.getOrdersByUserId );
+router.post( "/orders/orderIntial",  custumerMiddleware.verifyToken, CustumerControllers.orderInitial );
+router.get( "/orders/orderFinal",   CustumerControllers.orderFinal );
+router.get( "/orders/orderByNO",   CustumerControllers.getDetailOrderByOrderno );
 
 // custumer / cart 
 router.post( "/cart/add",custumerMiddleware.verifyToken,  CustumerControllers.addItemCart);

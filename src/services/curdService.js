@@ -1,4 +1,5 @@
-const {  ServiceError} = require('../utlis/index')
+const {  ServiceError} = require('../utlis/index');
+
 
 class CurdService { 
     constructor(repo){
@@ -8,10 +9,11 @@ class CurdService {
     async createService(data){
         try {
             const res = await this.repo.create(data);
+            
             return res; 
 
         } catch (error) {
-            console.log("something went wrong in service curd level  (create) ")
+            console.log("something went wrong in service curd level  (create) ", error)
             
             if (error.name == 'RepositoryError' || error.name == 'ValidationError') {
                 throw error;

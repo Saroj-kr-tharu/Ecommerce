@@ -5,8 +5,9 @@ const  {USER_REPO, OTP_Repo} = require('../repository/index')
 
 const bcryptHelper = require('../utlis/bcryptHelper');
 const {jwt_helper} = require('../utlis/jwtHelper');
-const generateOtpEmail = require('../utlis/MailTemplate/otpTempalte')
+const generateOtpEmail = require('../../../03_RemainderMicroService/src/utlis/Template/emailTemplate/otpTempalte')
 const {  AppError, HttpsStatusCodes, ServiceError} = require('../utlis/index');
+const sendMessageToQueueService = require("./queueService");
 
 
 
@@ -69,16 +70,22 @@ class OTPService extends CurdService {
 
 
             // Send OTP 
-            const mailFrom = "sarojtestingkrtharu@gmail.com"
-            const response = await this.#sendEmail(mailFrom, email, "otp", generateOtpEmail(code));
-            if(!response) 
-                throw new AppError(
-                        'OTP Sent Errors',
-                        `OTP to  ${email} is not sent `,
-                        'Issue in sending  in OTPService in  loginOTPservice function ',
-                        HttpsStatusCodes.ServerErrosCodes.INTERNAL_SERVER_ERROR
+            
 
-                    );
+    
+             const payload = {
+                subject: "Login By OTP",
+                content: "code",
+                recepientEmail: email,
+                notificationTime: new Date(),
+                typeMail: "SendOTP",
+                username: email ,
+                token: code,  
+            };
+            await sendMessageToQueueService(payload);
+            
+
+          
             
             return `OTP sent to ${email}`;
             
